@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../utils/ui_utils.dart';
@@ -7,7 +6,7 @@ import 'app_color.dart';
 class AppTheme {
   AppTheme._();
 
-  static lightTheme() {
+  static lightTheme(BuildContext context) {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
           seedColor: AppColor.primary500,
@@ -16,15 +15,13 @@ class AppTheme {
       primaryColor: AppColor.primary500,
       scaffoldBackgroundColor: AppColor.backgroundColor,
       useMaterial3: true,
-      appBarTheme:
-          const AppBarTheme(backgroundColor: Colors.white, centerTitle: true),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+      ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: const TextStyle(
-          color: AppColor.neutral200
-        ),
-        labelStyle: const TextStyle(
-          color: AppColor.neutral500
-        ),
+        hintStyle: const TextStyle(color: AppColor.neutral200),
+        labelStyle: const TextStyle(color: AppColor.neutral500),
         border: OutlineInputBorder(
           borderRadius: UIUtils.borderRadiusAll(),
         ),
@@ -37,6 +34,12 @@ class AppTheme {
         ),
         filled: true,
         fillColor: Colors.white,
+      ),
+      textTheme: Theme.of(context).textTheme.apply(
+            bodyColor: AppColor.neutral700,
+          ),
+      iconTheme: const IconThemeData(
+        color: AppColor.neutral700,
       ),
     );
   }

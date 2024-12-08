@@ -1,0 +1,115 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import '../../../model/restaurant_model.dart';
+import '../../../theme/app_color.dart';
+import '../../../utils/ui_utils.dart';
+
+class TopRestaurantCard extends StatelessWidget {
+  RestaurantModel restaurant;
+  final Function() onTap;
+
+  TopRestaurantCard({
+    super.key,
+    required this.restaurant,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: UIUtils.paddingLeft(16),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            color: Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: Stack(
+                  alignment: Alignment.topLeft,
+                  children: [
+                    Image.network(
+                      restaurant.getPictureUrl(),
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: AppColor.primary500,
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(16),
+                        ),
+                      ),
+                      padding: UIUtils.paddingSymmetric(
+                        vertical: 4,
+                        horizontal: 8,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                            UIUtils.widthSpace(8),
+                            Text(
+                              "${restaurant.rating}",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      restaurant.name ?? "",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    UIUtils.heightSpace(8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.location_on_rounded,
+                          size: 16,
+                        ),
+                        UIUtils.widthSpace(8),
+                        Flexible(
+                          child: Text(restaurant.city ?? ""),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
