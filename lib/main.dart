@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:santap_mantap_app/module/detail/detail_screen.dart';
+import 'package:santap_mantap_app/module/detail/restaurant_detail_screen.dart';
 import 'package:santap_mantap_app/module/home/home_screen.dart';
 
 import 'module/home/home_provider.dart';
@@ -32,7 +32,10 @@ class MyApp extends StatelessWidget {
       initialRoute: NavigationRoute.mainRoute.name,
       routes: {
         NavigationRoute.mainRoute.name: (context) => const HomeScreen(),
-        NavigationRoute.detailRoute.name: (context) => const DetailScreen(),
+        NavigationRoute.detailRoute.name: (context) => RestaurantDetailScreen(
+              restaurantId:
+                  ModalRoute.of(context)?.settings.arguments as String,
+            ),
       },
     );
   }

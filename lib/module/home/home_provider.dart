@@ -1,27 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:santap_mantap_app/model/restaurant_model.dart';
 import 'package:santap_mantap_app/network/api_service.dart';
+import 'package:santap_mantap_app/utils/ui_state.dart';
 
-sealed class HomeState {}
-
-class InitialState extends HomeState {}
-
-class LoadingState extends HomeState {}
-
-class ErrorState extends HomeState {
-  final String errorMessage;
-
-  ErrorState(this.errorMessage);
-}
-
-class LoadedState extends HomeState {}
 
 class HomeProvider extends ChangeNotifier {
   final ApiService apiService = ApiService();
 
-  HomeState _state = InitialState();
+  UIState _state = InitialState();
 
-  HomeState get state => _state;
+  UIState get state => _state;
 
   List<RestaurantModel> _topRestaurants = [];
 
@@ -32,27 +20,29 @@ class HomeProvider extends ChangeNotifier {
   List<RestaurantModel> get restaurants => _restaurants;
 
   Future<void> getRestaurants() async {
-    _state = LoadingState();
+    _state = UIState.loading();
     notifyListeners();
     try {
-      List<RestaurantModel> restaurants = await apiService.getRestaurants();
+      List<RestaurantModel> result = await apiService.getRestaurants();
+
+      // Create a copy of the original list
+      List<RestaurantModel> unsortedList = List.from(result);
 
       // Sort the list to get the top 3
-      final sorterRestaurants = restaurants;
-      sorterRestaurants.sort(
+      final sortedRestaurants = result;
+      sortedRestaurants.sort(
         (a, b) => (b.rating ?? 0).compareTo(a.rating ?? 0),
       );
 
-      _topRestaurants = sorterRestaurants.take(3).toList();
+      _topRestaurants = sortedRestaurants.take(3).toList();
 
-      // remove the top 3 from the list
-      restaurants.removeWhere((item) => topRestaurants.contains(item));
-      _restaurants = restaurants;
+      // remove the top 3 from the unsorted list
+      _restaurants = unsortedList.where((item) => !topRestaurants.contains(item)).toList();
 
-      _state = LoadedState();
+      _state = UIState.success();
       notifyListeners();
     } catch (e) {
-      _state = ErrorState(e.toString());
+      _state = UIState.error(e.toString());
       notifyListeners();
     }
   }
