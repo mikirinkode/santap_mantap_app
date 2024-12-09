@@ -1,3 +1,5 @@
+import 'package:santap_mantap_app/domain/entities/menu_entity.dart';
+
 class MenuModel {
   final List<MenuItemModel>? foods;
   final List<MenuItemModel>? drinks;
@@ -14,6 +16,11 @@ class MenuModel {
           .toList(),
     );
   }
+
+  MenuEntity toEntity() => MenuEntity(
+        foods: foods?.map((item) => item.toEntity()).toList(),
+        drinks: drinks?.map((item) => item.toEntity()).toList(),
+      );
 }
 
 class MenuItemModel {
@@ -24,4 +31,6 @@ class MenuItemModel {
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
     return MenuItemModel(name: json['name']);
   }
+
+  MenuItemEntity toEntity() => MenuItemEntity(name: name);
 }

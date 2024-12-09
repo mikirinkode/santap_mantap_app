@@ -1,13 +1,15 @@
 import 'dart:convert';
 
-import 'package:santap_mantap_app/network/api_config.dart';
+import 'package:santap_mantap_app/data/network/api_config.dart';
+import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 
+import '../../utils/image_size.dart';
 import 'category_model.dart';
 import 'menu_model.dart';
 import 'review_model.dart';
 
-class RestaurantModel {
-  final String? id;
+class RestaurantDetailModel {
+  final String id;
   final String? name;
   final String? description;
   final String? city;
@@ -18,8 +20,8 @@ class RestaurantModel {
   final double? rating;
   final List<CustomerReviewModel>? customerReviews;
 
-  RestaurantModel({
-    this.id,
+  RestaurantDetailModel({
+    required this.id,
     this.name,
     this.description,
     this.city,
@@ -31,13 +33,13 @@ class RestaurantModel {
     this.customerReviews,
   });
 
-  factory RestaurantModel.fromJson(Map<String, dynamic> json) {
+  factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) {
     final categories = json['categories'] as List?;
     final menus = json['menus'] as Map<String, dynamic>?;
     final customerReviews = json['customerReviews'] as List?;
 
-    return RestaurantModel(
-      id: json['id'] as String? ?? '',
+    return RestaurantDetailModel(
+      id: json['id'],
       name: json['name'] as String? ?? '',
       description: json['description'] as String? ?? '',
       city: json['city'] as String? ?? '',
@@ -53,31 +55,27 @@ class RestaurantModel {
     );
   }
 
-  static List<RestaurantModel> parseRestaurants(String? json) {
-    if (json == null) {
-      return [];
-    }
-
-    final Map<String, dynamic> parsed = jsonDecode(json);
-    final List data = parsed["restaurants"];
-    final result = data.map((json) => RestaurantModel.fromJson(json)).toList();
-    return result;
-  }
-
-  String getPictureUrl({
-    ImageSize size = ImageSize.small,
-  }) {
-    if (pictureId == null) {
+  String getPictureUrl() {
+    if (pictureId == null || pictureId!.isEmpty) {
       return '';
     } else {
-      switch (size) {
-        case ImageSize.small:
-          return ApiConfig.smallImageURL(pictureId!);
-        case ImageSize.medium:
-          return ApiConfig.mediumImageURL(pictureId!);
-        case ImageSize.large:
-          return ApiConfig.largeImageURL(pictureId!);
-      }
+      return ApiConfig.largeImageURL(pictureId!);
     }
+  }
+
+  RestaurantDetailEntity toEntity() {
+    return RestaurantDetailEntity(
+      id: id,
+      name: name,
+      description: description,
+      city: city,
+      address: address,
+      pictureId: pictureId,
+      categories: categories?.map((item) => item.toEntity()).toList(),
+      menus: menus?.toEntity(),
+      rating: rating,
+      customerReviews: customerReviews?.map((item) => item.toEntity()).toList(),
+      pictureUrl: getPictureUrl(),
+    );
   }
 }

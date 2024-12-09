@@ -1,3 +1,5 @@
+import 'package:santap_mantap_app/domain/entities/customer_review_entity.dart';
+
 class CustomerReviewModel {
   final String? name;
   final String? review;
@@ -16,4 +18,10 @@ class CustomerReviewModel {
       date: json['date'],
     );
   }
+
+  CustomerReviewEntity toEntity() => CustomerReviewEntity(
+        name: name,
+        review: review,
+        date: date,
+      );
 }

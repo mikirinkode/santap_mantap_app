@@ -1,9 +1,9 @@
-import '../../model/restaurant_model.dart';
+import '../../model/restaurant_detail_model.dart';
 
 class RestaurantDetailResponse {
   final bool error;
   final String message;
-  final RestaurantModel restaurant;
+  final RestaurantDetailModel restaurant;
 
   RestaurantDetailResponse({
     required this.error,
@@ -15,7 +15,7 @@ class RestaurantDetailResponse {
     return RestaurantDetailResponse(
       error: json['error'],
       message: json['message'],
-      restaurant: RestaurantModel.fromJson(json['restaurant']),
+      restaurant: RestaurantDetailModel.fromJson(json['restaurant']),
     );
   }
 }

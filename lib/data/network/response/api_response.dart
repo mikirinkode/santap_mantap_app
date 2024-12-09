@@ -1,3 +1,4 @@
+// TODO: REMOVE DUE TO UNUSED
 class ApiResponse<T> {
   final bool error;
   final String message;

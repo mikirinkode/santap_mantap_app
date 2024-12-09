@@ -2,15 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:santap_mantap_app/global_widgets/error_state_view.dart';
-import 'package:santap_mantap_app/module/home/home_provider.dart';
+import 'package:santap_mantap_app/presentation/global_widgets/error_state_view.dart';
+import 'package:santap_mantap_app/presentation/module/home/home_provider.dart';
 import 'package:santap_mantap_app/routes/navigation_route.dart';
 import 'package:santap_mantap_app/theme/app_color.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 
-import '../../model/restaurant_model.dart';
-import '../../utils/cache_manager_provider.dart';
+import '../../../data/model/restaurant_detail_model.dart';
+import '../../../domain/entities/restaurant_entity.dart';
+import '../../../utils/cache_manager_provider.dart';
 import 'widget/restaurant_card.dart';
 import 'widget/top_restaurant_card.dart';
 
@@ -230,7 +231,8 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: provider.restaurants.length,
             itemBuilder: (context, index) {
-              final RestaurantModel restaurant = provider.restaurants[index];
+              final RestaurantEntity restaurant =
+                  provider.restaurants[index];
               return RestaurantCard(
                 restaurant: restaurant,
                 onTap: () {

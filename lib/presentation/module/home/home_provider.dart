@@ -1,31 +1,34 @@
 import 'package:flutter/widgets.dart';
-import 'package:santap_mantap_app/model/restaurant_model.dart';
-import 'package:santap_mantap_app/network/api_service.dart';
+import 'package:santap_mantap_app/data/model/restaurant_detail_model.dart';
+import 'package:santap_mantap_app/data/network/remote_data_source.dart';
+import 'package:santap_mantap_app/di/injection.dart';
+import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
+import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 
 class HomeProvider extends ChangeNotifier {
-  final ApiService apiService = ApiService();
+  final RestaurantRepository _repository = Injection.instance.restaurantRepository;
 
   UIState _state = InitialState();
 
   UIState get state => _state;
 
-  List<RestaurantModel> _topRestaurants = [];
+  List<RestaurantEntity> _topRestaurants = [];
 
-  List<RestaurantModel> get topRestaurants => _topRestaurants;
+  List<RestaurantEntity> get topRestaurants => _topRestaurants;
 
-  List<RestaurantModel> _restaurants = [];
+  List<RestaurantEntity> _restaurants = [];
 
-  List<RestaurantModel> get restaurants => _restaurants;
+  List<RestaurantEntity> get restaurants => _restaurants;
 
   Future<void> getRestaurants() async {
     _state = UIState.loading();
     notifyListeners();
     try {
-      List<RestaurantModel> result = await apiService.getRestaurants();
+      List<RestaurantEntity> result = await _repository.getRestaurants();
 
       // Create a copy of the original list
-      List<RestaurantModel> unsortedList = List.from(result);
+      List<RestaurantEntity> unsortedList = List.from(result);
 
       // Sort the list to get the top 3
       final sortedRestaurants = result;

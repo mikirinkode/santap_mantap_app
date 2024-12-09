@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:santap_mantap_app/utils/cache_manager_provider.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 
-import '../../../model/restaurant_model.dart';
-import '../../../theme/app_color.dart';
+import '../../../../data/model/restaurant_detail_model.dart';
+import '../../../../domain/entities/restaurant_entity.dart';
+import '../../../../theme/app_color.dart';
 
 class RestaurantCard extends StatelessWidget {
-  RestaurantModel restaurant;
+  RestaurantEntity restaurant;
   final Function() onTap;
 
   RestaurantCard({
@@ -34,24 +35,21 @@ class RestaurantCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  child: Hero(
-                    tag: "hero-restaurant-image",
-                    child: CachedNetworkImage(
-                      imageUrl: restaurant.getPictureUrl(),
-                      width: 75,
-                      height: 75,
-                      fit: BoxFit.cover,
-                      cacheManager: CacheMangerProvider.restaurantImage,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: CupertinoActivityIndicator(),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: AppColor.neutral200,
-                        child: const Icon(
-                          Icons.image_not_supported,
-                          color: AppColor.neutral700,
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: restaurant.pictureUrl ?? "",
+                    width: 75,
+                    height: 75,
+                    fit: BoxFit.cover,
+                    cacheManager: CacheMangerProvider.restaurantImage,
+                    placeholder: (context, url) => const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: CupertinoActivityIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: AppColor.neutral200,
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        color: AppColor.neutral700,
                       ),
                     ),
                   ),

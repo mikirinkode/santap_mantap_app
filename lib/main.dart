@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:santap_mantap_app/module/detail/restaurant_detail_provider.dart';
-import 'package:santap_mantap_app/module/detail/restaurant_detail_screen.dart';
-import 'package:santap_mantap_app/module/home/home_screen.dart';
+import 'package:santap_mantap_app/di/injection.dart';
+import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
+import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_screen.dart';
+import 'package:santap_mantap_app/presentation/module/home/home_screen.dart';
 
-import 'module/home/home_provider.dart';
+import 'presentation/module/home/home_provider.dart';
 import 'routes/navigation_route.dart';
 import 'theme/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Injection.instance.initialize();
+
   runApp(
     MultiProvider(
       providers: [

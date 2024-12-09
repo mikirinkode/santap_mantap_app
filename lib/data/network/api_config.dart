@@ -1,5 +1,3 @@
-enum ImageSize { small, medium, large }
-
 class ApiConfig {
   ApiConfig._();
   

@@ -2,18 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:santap_mantap_app/model/menu_model.dart';
-import 'package:santap_mantap_app/model/restaurant_model.dart';
-import 'package:santap_mantap_app/model/review_model.dart';
-import 'package:santap_mantap_app/module/detail/restaurant_detail_provider.dart';
+import 'package:santap_mantap_app/data/model/menu_model.dart';
+import 'package:santap_mantap_app/data/model/restaurant_detail_model.dart';
+import 'package:santap_mantap_app/data/model/review_model.dart';
+import 'package:santap_mantap_app/domain/entities/customer_review_entity.dart';
+import 'package:santap_mantap_app/domain/entities/menu_entity.dart';
+import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
+import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/utils/app_icons.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 
+import '../../../utils/image_size.dart';
 import '../../global_widgets/error_state_view.dart';
-import '../../network/api_config.dart';
-import '../../theme/app_color.dart';
-import '../../utils/cache_manager_provider.dart';
-import '../../utils/ui_utils.dart';
+import '../../../data/network/api_config.dart';
+import '../../../theme/app_color.dart';
+import '../../../utils/cache_manager_provider.dart';
+import '../../../utils/ui_utils.dart';
 
 class RestaurantDetailScreen extends StatefulWidget {
   final String restaurantId;
@@ -32,7 +36,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read<RestaurantDetailProvider>().getRestaurant(
+      context.read<RestaurantDetailProvider>().getRestaurantDetail(
             widget.restaurantId,
           );
     });
@@ -51,7 +55,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             onError: (message) => ErrorStateView(
               message: message,
               onRetry: () {
-                provider.getRestaurant(widget.restaurantId);
+                provider.getRestaurantDetail(widget.restaurantId);
               },
             ),
             onSuccess: () => buildContent(restaurant: provider.restaurant),
@@ -61,7 +65,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     );
   }
 
-  Widget buildContent({RestaurantModel? restaurant}) {
+  Widget buildContent({RestaurantDetailEntity? restaurant}) {
     return Stack(
       children: [
         ClipRRect(
@@ -69,24 +73,21 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
-          child: Hero(
-            tag: "hero-restaurant-image",
-            child: CachedNetworkImage(
-              imageUrl: restaurant?.getPictureUrl(size: ImageSize.large) ?? "",
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              cacheManager: CacheMangerProvider.restaurantImage,
-              placeholder: (context, url) => const Padding(
-                padding: EdgeInsets.all(4.0),
-                child: CupertinoActivityIndicator(),
-              ),
-              errorWidget: (context, url, error) => Container(
-                color: AppColor.neutral200,
-                child: const Icon(
-                  Icons.image_not_supported,
-                  color: AppColor.neutral700,
-                ),
+          child: CachedNetworkImage(
+            imageUrl: restaurant?.pictureUrl ?? "",
+            height: 300,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            cacheManager: CacheMangerProvider.restaurantImage,
+            placeholder: (context, url) => const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: CupertinoActivityIndicator(),
+            ),
+            errorWidget: (context, url, error) => Container(
+              color: AppColor.neutral200,
+              child: const Icon(
+                Icons.image_not_supported,
+                color: AppColor.neutral700,
               ),
             ),
           ),
@@ -106,7 +107,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 ),
                 buildMenuSection(
                   menu: restaurant?.menus ??
-                      MenuModel(
+                      MenuEntity(
                         foods: [],
                         drinks: [],
                       ),
@@ -219,7 +220,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     );
   }
 
-  Widget buildMenuSection({required MenuModel menu}) {
+  Widget buildMenuSection({required MenuEntity menu}) {
     return Padding(
       padding: UIUtils.paddingFromLTRB(
         left: 0,
@@ -408,7 +409,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     );
   }
 
-  Widget buildReviewSection({required List<CustomerReviewModel> reviews}) {
+  Widget buildReviewSection({required List<CustomerReviewEntity> reviews}) {
     return Padding(
       padding: UIUtils.paddingFromLTRB(
         left: 16,
@@ -444,7 +445,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     );
   }
 
-  Widget buildReviewCard({required CustomerReviewModel review}) {
+  Widget buildReviewCard({required CustomerReviewEntity review}) {
     return Padding(
       padding: UIUtils.paddingBottom(16),
       child: Column(

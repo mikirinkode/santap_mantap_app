@@ -1,4 +1,4 @@
-import '../../model/restaurant_model.dart';
+import 'package:santap_mantap_app/data/model/restaurant_model.dart';
 
 class RestaurantListResponse {
   final bool error;
