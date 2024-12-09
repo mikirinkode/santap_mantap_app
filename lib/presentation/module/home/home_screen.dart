@@ -42,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return provider.state.when(
               onInitial: () => const SizedBox(),
               onLoading: () => const Center(
-                child: CupertinoActivityIndicator(),
+                child: CupertinoActivityIndicator(
+                  radius: 18,
+                ),
               ),
               onError: (message) => ErrorStateView(
                 message: message,
@@ -165,30 +167,35 @@ class _HomeScreenState extends State<HomeScreen> {
         right: 16,
         bottom: 0,
       ),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(width: 1, color: AppColor.neutral200),
-        ),
-        padding: UIUtils.paddingAll(16),
-        child: const Row(
-          children: [
-            Text(
-              "Cari Resto",
-              style: TextStyle(
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-                color: AppColor.neutral200,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, NavigationRoute.searchRoute.name);
+        },
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(width: 1, color: AppColor.neutral200),
+          ),
+          padding: UIUtils.paddingAll(16),
+          child: const Row(
+            children: [
+              Text(
+                "Cari Restoran",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  color: AppColor.neutral200,
+                ),
               ),
-            ),
-            Spacer(),
-            Icon(
-              CupertinoIcons.search,
-              size: 16,
-            ),
-          ],
+              Spacer(),
+              Icon(
+                CupertinoIcons.search,
+                size: 16,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -231,8 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: provider.restaurants.length,
             itemBuilder: (context, index) {
-              final RestaurantEntity restaurant =
-                  provider.restaurants[index];
+              final RestaurantEntity restaurant = provider.restaurants[index];
               return RestaurantCard(
                 restaurant: restaurant,
                 onTap: () {

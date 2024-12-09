@@ -50,7 +50,9 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
           return provider.state.when(
             onInitial: () => const SizedBox(),
             onLoading: () => const Center(
-              child: CupertinoActivityIndicator(),
+              child: CupertinoActivityIndicator(
+                radius: 18,
+              ),
             ),
             onError: (message) => ErrorStateView(
               message: message,

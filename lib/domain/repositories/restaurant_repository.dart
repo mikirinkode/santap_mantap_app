@@ -6,4 +6,5 @@ import '../../data/model/restaurant_detail_model.dart';
 abstract class RestaurantRepository {
   Future<List<RestaurantEntity>> getRestaurants();
   Future<RestaurantDetailEntity> getRestaurantDetail(String id);
+  Future<List<RestaurantEntity>> searchRestaurants({required String query});
 }

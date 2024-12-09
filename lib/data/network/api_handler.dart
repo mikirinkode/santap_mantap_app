@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiHandler {
@@ -8,7 +9,7 @@ class ApiHandler {
     required T Function(Map<String, dynamic>) fromJson,
     required String errorMessage,
   }) async {
-    print("[GET] url: $url");
+    debugPrint("[GET] url: $url");
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -17,11 +18,11 @@ class ApiHandler {
       } else {
         print(
             "ApiHandler::Failed to get data. Status code: ${response.statusCode}");
-        print("ApiHandler::Failed to get data. body: ${response.body}");
+        debugPrint("ApiHandler::Failed to get data. body: ${response.body}");
         return Future.error(errorMessage);
       }
     } catch (e) {
-      print("ApiHandler::Failed to parse data. error: $e");
+      debugPrint("ApiHandler::Failed to parse data. error: $e");
       return Future.error(e);
     }
   }

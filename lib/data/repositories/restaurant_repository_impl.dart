@@ -32,4 +32,14 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
       return Future.error(e);
     }
   }
+
+  @override
+  Future<List<RestaurantEntity>> searchRestaurants({required String query}) async {
+    try {
+      final result = await _remoteDataSource.searchRestaurants(query);
+      return result.map((model) => model.toEntity()).toList();
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 }

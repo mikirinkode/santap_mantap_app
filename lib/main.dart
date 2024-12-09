@@ -4,6 +4,8 @@ import 'package:santap_mantap_app/di/injection.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_screen.dart';
 import 'package:santap_mantap_app/presentation/module/home/home_screen.dart';
+import 'package:santap_mantap_app/presentation/module/search/search_provider.dart';
+import 'package:santap_mantap_app/presentation/module/search/search_screen.dart';
 
 import 'presentation/module/home/home_provider.dart';
 import 'routes/navigation_route.dart';
@@ -22,6 +24,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (_) => RestaurantDetailProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SearchProvider(),
         ),
       ],
       child: const MyApp(),
@@ -45,6 +50,7 @@ class MyApp extends StatelessWidget {
               restaurantId:
                   ModalRoute.of(context)?.settings.arguments as String,
             ),
+        NavigationRoute.searchRoute.name: (context) => const SearchScreen(),
       },
     );
   }
