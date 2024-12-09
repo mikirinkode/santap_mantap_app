@@ -32,21 +32,24 @@ class RestaurantCard extends StatelessWidget {
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.all(const Radius.circular(16)),
-                  child: CachedNetworkImage(
-                    imageUrl: restaurant.getPictureUrl(),
-                    width: 75,
-                    height: 75,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: CupertinoActivityIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColor.neutral200,
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        color: AppColor.neutral700,
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  child: Hero(
+                    tag: "hero-restaurant-image",
+                    child: CachedNetworkImage(
+                      imageUrl: restaurant.getPictureUrl(),
+                      width: 75,
+                      height: 75,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: CupertinoActivityIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: AppColor.neutral200,
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          color: AppColor.neutral700,
+                        ),
                       ),
                     ),
                   ),

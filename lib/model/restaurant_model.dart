@@ -65,12 +65,19 @@ class RestaurantModel {
   }
 
   String getPictureUrl({
-    String size = 'small',
+    ImageSize size = ImageSize.small,
   }) {
     if (pictureId == null) {
       return '';
     } else {
-      return ApiConfig.smallImageURL(pictureId!);
+      switch (size) {
+        case ImageSize.small:
+          return ApiConfig.smallImageURL(pictureId!);
+        case ImageSize.medium:
+          return ApiConfig.mediumImageURL(pictureId!);
+        case ImageSize.large:
+          return ApiConfig.largeImageURL(pictureId!);
+      }
     }
   }
 }

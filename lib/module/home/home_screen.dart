@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:santap_mantap_app/global_widgets/error_state_view.dart';
 import 'package:santap_mantap_app/module/home/home_provider.dart';
 import 'package:santap_mantap_app/routes/navigation_route.dart';
 import 'package:santap_mantap_app/theme/app_color.dart';
@@ -39,10 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
             return provider.state.when(
               onInitial: () => const SizedBox(),
               onLoading: () => const Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(),
               ),
-              onError: (message) => Center(
-                child: Text(message),
+              onError: (message) => ErrorStateView(
+                message: message,
+                onRetry: () {
+                  provider.getRestaurants();
+                },
               ),
               onSuccess: () => buildContent(),
             );

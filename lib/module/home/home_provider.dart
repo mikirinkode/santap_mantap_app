@@ -3,7 +3,6 @@ import 'package:santap_mantap_app/model/restaurant_model.dart';
 import 'package:santap_mantap_app/network/api_service.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 
-
 class HomeProvider extends ChangeNotifier {
   final ApiService apiService = ApiService();
 
@@ -37,7 +36,8 @@ class HomeProvider extends ChangeNotifier {
       _topRestaurants = sortedRestaurants.take(3).toList();
 
       // remove the top 3 from the unsorted list
-      _restaurants = unsortedList.where((item) => !topRestaurants.contains(item)).toList();
+      _restaurants =
+          unsortedList.where((item) => !topRestaurants.contains(item)).toList();
 
       _state = UIState.success();
       notifyListeners();

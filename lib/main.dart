@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:santap_mantap_app/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/module/detail/restaurant_detail_screen.dart';
 import 'package:santap_mantap_app/module/home/home_screen.dart';
 
@@ -13,6 +14,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (_) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RestaurantDetailProvider(),
         ),
       ],
       child: const MyApp(),

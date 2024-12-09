@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -37,11 +39,25 @@ class TopRestaurantCard extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.topLeft,
                   children: [
-                    Image.network(
-                      restaurant.getPictureUrl(),
-                      height: 150,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                    Hero(
+                      tag: "hero-restaurant-image",
+                      child: CachedNetworkImage(
+                        imageUrl: restaurant.getPictureUrl(),
+                        height: 150,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: CupertinoActivityIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: AppColor.neutral200,
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            color: AppColor.neutral700,
+                          ),
+                        ),
+                      ),
                     ),
                     Container(
                       decoration: const BoxDecoration(
@@ -61,7 +77,7 @@ class TopRestaurantCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(
-                              Icons.star,
+                              Icons.star_rounded,
                               size: 16,
                               color: Colors.white,
                             ),
