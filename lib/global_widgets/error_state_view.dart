@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:santap_mantap_app/theme/app_button_style.dart';
 import 'package:santap_mantap_app/theme/app_color.dart';
@@ -48,7 +47,7 @@ class ErrorStateView extends StatelessWidget {
             FilledButton(
               onPressed: onRetry,
               style: AppButtonStyle.filledPrimary,
-              child: Text("Coba Lagi"),
+              child: const Text("Coba Lagi"),
             ),
           ],
         ),

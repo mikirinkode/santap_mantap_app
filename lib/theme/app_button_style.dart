@@ -8,24 +8,24 @@ class AppButtonStyle {
   AppButtonStyle._();
 
   static ButtonStyle filledPrimary = ButtonStyle(
-    backgroundColor: MaterialStateProperty.resolveWith(
+    backgroundColor: WidgetStateProperty.resolveWith(
           (states) {
-        if (states.contains(MaterialState.disabled)) {
+        if (states.contains(WidgetState.disabled)) {
           return AppColor.neutral200;
         }
         return AppColor.primary500;
       },
     ),
-    padding: MaterialStateProperty.all(
+    padding: WidgetStateProperty.all(
         UIUtils.paddingSymmetric(vertical: 12, horizontal: 24)),
-    shape: MaterialStateProperty.all(
+    shape: WidgetStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: UIUtils.borderRadiusAll(),
       ),
     ),
-    foregroundColor: MaterialStateProperty.resolveWith(
+    foregroundColor: WidgetStateProperty.resolveWith(
           (states) {
-        if (states.contains(MaterialState.disabled)) {
+        if (states.contains(WidgetState.disabled)) {
           return AppColor.neutral500;
         }
         return Colors.white;

@@ -127,7 +127,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 Navigator.pop(context);
               },
               backgroundColor: Colors.white,
-              child: Icon(
+              child: const Icon(
                 CupertinoIcons.back,
               ),
             ),
