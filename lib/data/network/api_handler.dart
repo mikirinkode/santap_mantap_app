@@ -26,4 +26,34 @@ class ApiHandler {
       return Future.error(e);
     }
   }
+
+  static Future<T> post<T>({
+    required String url,
+    required Map<String, String> headers,
+    required Map<String, dynamic> body,
+    required T Function(Map<String, dynamic>) fromJson,
+    required String errorMessage,
+  }) async {
+    debugPrint("[POST] url: $url");
+    debugPrint("[POST] body: $body");
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var body = json.decode(response.body);
+        return fromJson(body);
+      } else {
+        debugPrint(
+            "ApiHandler::Failed to get data. Status code: ${response.statusCode}");
+        debugPrint("ApiHandler::Failed to get data. body: ${response.body}");
+        return Future.error(errorMessage);
+      }
+    } catch (e) {
+      debugPrint("ApiHandler::Failed to get data. error: $e");
+      return Future.error(e);
+    }
+  }
 }

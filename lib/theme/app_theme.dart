@@ -41,6 +41,10 @@ class AppTheme {
       iconTheme: const IconThemeData(
         color: AppColor.neutral700,
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColor.primary500,
+        foregroundColor: Colors.white,
+      ),
     );
   }
 }

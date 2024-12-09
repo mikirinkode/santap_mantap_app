@@ -6,7 +6,7 @@ import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart'
 import '../../utils/image_size.dart';
 import 'category_model.dart';
 import 'menu_model.dart';
-import 'review_model.dart';
+import 'customer_review_model.dart';
 
 class RestaurantDetailModel {
   final String id;

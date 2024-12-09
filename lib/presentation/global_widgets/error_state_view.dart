@@ -22,32 +22,44 @@ class ErrorStateView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error,
-              color: Colors.red,
-              size: 100,
-            ),
-            UIUtils.heightSpace(24),
-            const Text(
-              "Terjadi Kesalahan",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-            ),
-            UIUtils.heightSpace(8),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColor.neutral400,
+              padding: UIUtils.paddingAll(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 100,
+                  ),
+                  UIUtils.heightSpace(24),
+                  const Text(
+                    "Terjadi Kesalahan",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  UIUtils.heightSpace(8),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColor.neutral400,
+                    ),
+                  ),
+                  UIUtils.heightSpace(16),
+                  FilledButton(
+                    onPressed: onRetry,
+                    style: AppButtonStyle.filledPrimary,
+                    child: const Text("Coba Lagi"),
+                  ),
+                ],
               ),
-            ),
-            UIUtils.heightSpace(16),
-            FilledButton(
-              onPressed: onRetry,
-              style: AppButtonStyle.filledPrimary,
-              child: const Text("Coba Lagi"),
             ),
           ],
         ),

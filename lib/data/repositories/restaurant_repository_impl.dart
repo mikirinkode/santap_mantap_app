@@ -3,8 +3,10 @@ import 'package:santap_mantap_app/data/network/remote_data_source.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
+import 'package:santap_mantap_app/domain/entities/review_entity.dart';
 
 import '../../domain/repositories/restaurant_repository.dart';
+import '../network/body/review_body.dart';
 
 class RestaurantRepositoryImpl implements RestaurantRepository {
   
@@ -38,6 +40,20 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
     try {
       final result = await _remoteDataSource.searchRestaurants(query);
       return result.map((model) => model.toEntity()).toList();
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  @override
+  Future<void> postReview({required ReviewEntity review}) async {
+    try {
+      final result = await _remoteDataSource.postReview(
+        ReviewBody.fromEntity(review),
+      );
+      if (result.error == true){
+        return Future.error("Gagal mengirim review");
+      }
     } catch (e) {
       return Future.error(e);
     }

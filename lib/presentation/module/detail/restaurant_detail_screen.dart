@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:santap_mantap_app/data/model/menu_model.dart';
 import 'package:santap_mantap_app/data/model/restaurant_detail_model.dart';
-import 'package:santap_mantap_app/data/model/review_model.dart';
+import 'package:santap_mantap_app/data/model/customer_review_model.dart';
 import 'package:santap_mantap_app/domain/entities/customer_review_entity.dart';
 import 'package:santap_mantap_app/domain/entities/menu_entity.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
@@ -60,7 +60,37 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 provider.getRestaurantDetail(widget.restaurantId);
               },
             ),
-            onSuccess: () => buildContent(restaurant: provider.restaurant),
+            onSuccess: () => Stack(
+              children: [
+                buildContent(restaurant: provider.restaurant),
+                provider.submitState.when(
+                  onInitial: () => const SizedBox(),
+                  onLoading: () => Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColor.primary50,
+                        border:
+                            Border.all(width: 1, color: AppColor.primary500),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      padding: UIUtils.paddingAll(24),
+                      child: const CupertinoActivityIndicator(
+                        radius: 18,
+                      ),
+                    ),
+                  ),
+                  onError: (message) => ErrorStateView(
+                    message: message,
+                    onRetry: () {
+                      provider.submitReview(
+                          restaurantId: widget.restaurantId,
+                          onSuccess:_showSuccessSnackbar);
+                    },
+                  ),
+                  onSuccess: () => const SizedBox(),
+                )
+              ],
+            ),
           );
         },
       ),
@@ -119,7 +149,8 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 ),
                 buildReviewSection(
                   reviews: restaurant?.customerReviews ?? [],
-                )
+                ),
+                UIUtils.heightSpace(72),
               ],
             ),
           ),
@@ -127,13 +158,34 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
         SafeArea(
           child: Padding(
             padding: UIUtils.paddingAll(16),
-            child: FloatingActionButton(
+            child: FloatingActionButton.small(
               onPressed: () {
                 Navigator.pop(context);
               },
               backgroundColor: Colors.white,
               child: const Icon(
-                CupertinoIcons.back,
+                Icons.arrow_back_rounded,
+                color: AppColor.neutral700,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: UIUtils.paddingAll(24),
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                _showAddReviewDialog();
+              },
+              label: Row(
+                children: [
+                  const Icon(Icons.edit_note_sharp),
+                  UIUtils.widthSpace(8),
+                  const Text(
+                    "Tulis Review",
+                  ),
+                ],
               ),
             ),
           ),
@@ -494,6 +546,59 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showAddReviewDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Consumer<RestaurantDetailProvider>(
+            builder: (context, provider, child) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Text('Tulis Review'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  UIUtils.heightSpace(16),
+                  TextField(
+                    onChanged: provider.onUserNameChanged,
+                    decoration: InputDecoration(
+                      label: Text("Nama"),
+                    ),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  UIUtils.heightSpace(16),
+                  TextField(
+                    onChanged: provider.onUserReviewChanged,
+                    decoration: InputDecoration(
+                      label: Text("Review"),
+                    ),
+                    textInputAction: TextInputAction.done,
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Kirim'),
+                onPressed: () {
+                  provider.submitReview(restaurantId: widget.restaurantId, onSuccess: _showSuccessSnackbar);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  _showSuccessSnackbar(){
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Review berhasil dikirim')),
     );
   }
 }
