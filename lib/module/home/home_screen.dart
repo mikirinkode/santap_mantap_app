@@ -10,6 +10,7 @@ import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 
 import '../../model/restaurant_model.dart';
+import '../../utils/cache_manager_provider.dart';
 import 'widget/restaurant_card.dart';
 import 'widget/top_restaurant_card.dart';
 
@@ -118,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 45,
                 height: 45,
                 fit: BoxFit.cover,
+                cacheManager: CacheMangerProvider.restaurantImage,
                 placeholder: (context, url) => const Padding(
                   padding: EdgeInsets.all(4.0),
                   child: CupertinoActivityIndicator(),

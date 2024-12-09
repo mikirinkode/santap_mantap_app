@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/restaurant_model.dart';
 import '../../../theme/app_color.dart';
+import '../../../utils/cache_manager_provider.dart';
 import '../../../utils/ui_utils.dart';
 
 class TopRestaurantCard extends StatelessWidget {
@@ -45,6 +46,7 @@ class TopRestaurantCard extends StatelessWidget {
                         height: 150,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        cacheManager: CacheMangerProvider.restaurantImage,
                         placeholder: (context, url) => const Padding(
                           padding: EdgeInsets.all(4.0),
                           child: CupertinoActivityIndicator(),

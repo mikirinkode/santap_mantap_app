@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:santap_mantap_app/utils/cache_manager_provider.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 
 import '../../../model/restaurant_model.dart';
@@ -40,6 +41,7 @@ class RestaurantCard extends StatelessWidget {
                       width: 75,
                       height: 75,
                       fit: BoxFit.cover,
+                      cacheManager: CacheMangerProvider.restaurantImage,
                       placeholder: (context, url) => const Padding(
                         padding: EdgeInsets.all(4.0),
                         child: CupertinoActivityIndicator(),
