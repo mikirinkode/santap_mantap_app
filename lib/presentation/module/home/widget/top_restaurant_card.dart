@@ -40,21 +40,24 @@ class TopRestaurantCard extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.topLeft,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: restaurant.pictureUrl ?? "",
-                      height: 150,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      cacheManager: CacheMangerProvider.restaurantImage,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: CupertinoActivityIndicator(),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: AppColor.neutral200,
-                        child: const Icon(
-                          Icons.image_not_supported,
-                          color: AppColor.neutral700,
+                    Hero(
+                      tag: "restaurant-image-${restaurant.id}",
+                      child: CachedNetworkImage(
+                        imageUrl: restaurant.pictureUrl ?? "",
+                        height: 150,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        cacheManager: CacheMangerProvider.restaurantImage,
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: CupertinoActivityIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: AppColor.neutral200,
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            color: AppColor.neutral700,
+                          ),
                         ),
                       ),
                     ),

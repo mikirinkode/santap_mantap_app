@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:santap_mantap_app/presentation/global_widgets/empty_state_view.dart';
 import 'package:santap_mantap_app/presentation/module/home/widget/restaurant_card.dart';
 import 'package:santap_mantap_app/presentation/module/search/search_provider.dart';
+import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../routes/navigation_route.dart';
 import '../../../theme/app_color.dart';
@@ -47,7 +49,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     textInputAction: TextInputAction.search,
                     autofocus: true,
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(
+                        CupertinoIcons.search,
+                        size: 18,
+                      ),
                       hintText: "Cari restoran",
                       hintStyle: TextStyle(
                         fontSize: 16,
@@ -59,14 +64,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 provider.state.when(
-                  onInitial: () => const SizedBox(),
-                  onLoading: () => const Expanded(
-                    child: Center(
-                      child: CupertinoActivityIndicator(
-                        radius: 16,
-                      ),
-                    ),
-                  ),
+                  onInitial: () => Expanded(child: buildInitialSearchInfo()),
+                  onLoading: () => Flexible(child: buildLoadingIndicator()),
                   onError: (message) => Expanded(
                     child: ErrorStateView(
                       message: message,
@@ -104,6 +103,58 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Widget buildInitialSearchInfo() {
+    return Padding(
+      padding: UIUtils.paddingAll(24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            CupertinoIcons.search,
+            color: AppColor.neutral400,
+            size: 100,
+          ),
+          UIUtils.heightSpace(24),
+          const Text(
+            "Cari Resto",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          UIUtils.heightSpace(8),
+          const Text(
+            "Cari nama restoran dan temukan restoran favoritmu disini.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColor.neutral400,
+            ),
+          ),
+          UIUtils.heightSpace(16),
+        ],
+      ),
+    );
+  }
+
+  Widget buildLoadingIndicator() {
+    return Skeletonizer(
+      child: SingleChildScrollView(
+        physics: const ScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        padding: UIUtils.paddingTop(16),
+        child: Column(
+          children: UiLoadingDummyData.dummyRestaurants
+              .map((e) => RestaurantCard(
+                    restaurant: e,
+                    onTap: () {},
+                  ))
+              .toList(),
         ),
       ),
     );

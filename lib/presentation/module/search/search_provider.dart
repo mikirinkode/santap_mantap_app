@@ -28,25 +28,30 @@ class SearchProvider extends ChangeNotifier {
   }
 
   Future<void> onSearchInputChanged({required String query}) async {
-    debugPrint("onSearchInputChanged: $query");
+    if (query.isEmpty) {
+      _restaurants.clear();
+      notifyListeners();
+    } else {
+      debugPrint("onSearchInputChanged: $query");
 
-    _query = query.trim();
-    _state = UIState.loading();
-    notifyListeners();
+      _query = query.trim();
+      _state = UIState.loading();
+      notifyListeners();
 
-    debugPrint("isDebounce active: ${_debounce?.isActive ?? false}");
+      debugPrint("isDebounce active: ${_debounce?.isActive ?? false}");
 
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    _debounce = Timer(const Duration(seconds: 1), () async {
-      try {
-        _restaurants = await _repository.searchRestaurants(query: query);
-        _state = UIState.success();
-        notifyListeners();
-      } catch (e) {
-        _state = UIState.error(e.toString());
-        notifyListeners();
-      }
-    });
+      _debounce = Timer(const Duration(seconds: 1), () async {
+        try {
+          _restaurants = await _repository.searchRestaurants(query: query);
+          _state = UIState.success();
+          notifyListeners();
+        } catch (e) {
+          _state = UIState.error(e.toString());
+          notifyListeners();
+        }
+      });
+    }
   }
 }

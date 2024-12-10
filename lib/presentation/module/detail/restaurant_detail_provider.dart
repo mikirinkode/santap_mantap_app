@@ -16,10 +16,6 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   UIState get state => _state;
 
-  // UIState _submitState = InitialState();
-
-  // UIState get submitState => _submitState;
-
   RestaurantDetailEntity? _restaurant;
 
   RestaurantDetailEntity? get restaurant => _restaurant;

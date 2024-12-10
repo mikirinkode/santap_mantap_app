@@ -34,22 +34,30 @@ class RestaurantCard extends StatelessWidget {
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  child: CachedNetworkImage(
-                    imageUrl: restaurant.pictureUrl ?? "",
-                    width: 75,
-                    height: 75,
-                    fit: BoxFit.cover,
-                    cacheManager: CacheMangerProvider.restaurantImage,
-                    placeholder: (context, url) => const Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: CupertinoActivityIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColor.neutral200,
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        color: AppColor.neutral700,
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(16)),
+                  child: Hero(
+                    tag: "restaurant-image-${restaurant.id}",
+                    createRectTween: (Rect? begin, Rect? end) {
+                      return MaterialRectCenterArcTween(
+                          begin: begin, end: end);
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: restaurant.pictureUrl ?? "",
+                      width: 75,
+                      height: 75,
+                      fit: BoxFit.cover,
+                      cacheManager: CacheMangerProvider.restaurantImage,
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: CupertinoActivityIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: AppColor.neutral200,
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          color: AppColor.neutral700,
+                        ),
                       ),
                     ),
                   ),
@@ -61,10 +69,10 @@ class RestaurantCard extends StatelessWidget {
                     children: [
                       Text(
                         restaurant.name ?? "",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                            ),
                       ),
                       UIUtils.heightSpace(8),
                       Row(

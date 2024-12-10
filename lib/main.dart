@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:santap_mantap_app/di/injection.dart';
+import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_screen.dart';
 import 'package:santap_mantap_app/presentation/module/home/home_screen.dart';
@@ -47,8 +48,8 @@ class MyApp extends StatelessWidget {
       routes: {
         NavigationRoute.mainRoute.name: (context) => const HomeScreen(),
         NavigationRoute.detailRoute.name: (context) => RestaurantDetailScreen(
-              restaurantId:
-                  ModalRoute.of(context)?.settings.arguments as String,
+              restaurantArg: ModalRoute.of(context)?.settings.arguments
+                  as RestaurantEntity,
             ),
         NavigationRoute.searchRoute.name: (context) => const SearchScreen(),
       },

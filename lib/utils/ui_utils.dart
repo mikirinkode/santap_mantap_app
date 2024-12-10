@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class UIUtils {
   UIUtils._();
 
-  static const double borderRadius = 12;
+  static const double borderRadius = 16;
 
   // space
   static heightSpace(double height) => SizedBox(height: height);
@@ -13,7 +13,9 @@ class UIUtils {
   // padding
   static paddingAll(double padding) => EdgeInsets.all(padding);
 
-  static paddingSymmetric({required double vertical, required double horizontal}) => EdgeInsets.symmetric(vertical: vertical, horizontal: horizontal);
+  static paddingSymmetric(
+          {required double vertical, required double horizontal}) =>
+      EdgeInsets.symmetric(vertical: vertical, horizontal: horizontal);
 
   static paddingTop(double padding) => EdgeInsets.only(top: padding);
 
@@ -23,11 +25,18 @@ class UIUtils {
 
   static paddingRight(double padding) => EdgeInsets.only(right: padding);
 
-  static paddingHorizontal(double padding) => EdgeInsets.symmetric(horizontal: padding);
+  static paddingHorizontal(double padding) =>
+      EdgeInsets.symmetric(horizontal: padding);
 
-  static paddingVertical(double padding) => EdgeInsets.symmetric(vertical: padding);
+  static paddingVertical(double padding) =>
+      EdgeInsets.symmetric(vertical: padding);
 
-  static paddingFromLTRB({required double left, required double top, required double right, required double bottom}) => EdgeInsets.fromLTRB(left, top, right, bottom);
+  static paddingFromLTRB(
+          {required double left,
+          required double top,
+          required double right,
+          required double bottom}) =>
+      EdgeInsets.fromLTRB(left, top, right, bottom);
 
   // border radius
   static borderRadiusAll({double radius = UIUtils.borderRadius}) =>

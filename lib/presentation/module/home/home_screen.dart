@@ -6,8 +6,10 @@ import 'package:santap_mantap_app/presentation/global_widgets/error_state_view.d
 import 'package:santap_mantap_app/presentation/module/home/home_provider.dart';
 import 'package:santap_mantap_app/routes/navigation_route.dart';
 import 'package:santap_mantap_app/theme/app_color.dart';
+import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../data/model/restaurant_detail_model.dart';
 import '../../../domain/entities/restaurant_entity.dart';
@@ -41,18 +43,31 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, provider, child) {
             return provider.state.when(
               onInitial: () => const SizedBox(),
-              onLoading: () => const Center(
-                child: CupertinoActivityIndicator(
-                  radius: 18,
-                ),
-              ),
+              onLoading: () => buildLoadingIndicator(),
               onError: (message) => ErrorStateView(
                 message: message,
                 onRetry: () {
                   provider.getRestaurants();
                 },
               ),
-              onSuccess: () => buildContent(),
+              onSuccess: () => SingleChildScrollView(
+                physics: const ScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildHeader(),
+                    buildSearchBar(),
+                    buildSectionTitle(title: "Resto Top Markotop"),
+                    buildTopRestaurantRow(
+                        topRestaurants: provider.topRestaurants),
+                    buildSectionTitle(title: "Restoran lainnya"),
+                    buildRestaurantList(restaurants: provider.restaurants),
+                    UIUtils.heightSpace(16),
+                  ],
+                ),
+              ),
             );
           },
         ),
@@ -60,22 +75,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildContent() {
-    return SingleChildScrollView(
-      physics: const ScrollPhysics(
-        parent: BouncingScrollPhysics(),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildHeader(),
-          buildSearchBar(),
-          buildSectionTitle(title: "Resto Top Markotop"),
-          buildTopRestaurantRow(),
-          buildSectionTitle(title: "Restoran lainnya"),
-          buildRestaurantList(),
-          UIUtils.heightSpace(16),
-        ],
+  Widget buildLoadingIndicator() {
+    return Skeletonizer(
+      child: SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildHeader(),
+            buildSearchBar(),
+            buildSectionTitle(title: "Resto Top Markotop"),
+            buildTopRestaurantRow(
+                topRestaurants: UiLoadingDummyData.dummyRestaurants),
+            buildSectionTitle(title: "Restoran lainnya"),
+            buildRestaurantList(
+                restaurants: UiLoadingDummyData.dummyRestaurants),
+            UIUtils.heightSpace(16),
+          ],
+        ),
       ),
     );
   }
@@ -179,20 +196,20 @@ class _HomeScreenState extends State<HomeScreen> {
             border: Border.all(width: 1, color: AppColor.neutral200),
           ),
           padding: UIUtils.paddingAll(16),
-          child: const Row(
+          child: Row(
             children: [
-              Text(
+              const Icon(
+                CupertinoIcons.search,
+                size: 18,
+              ),
+              UIUtils.widthSpace(12),
+              const Text(
                 "Cari Restoran",
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
                   color: AppColor.neutral200,
                 ),
-              ),
-              Spacer(),
-              Icon(
-                CupertinoIcons.search,
-                size: 16,
               ),
             ],
           ),
@@ -201,53 +218,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildTopRestaurantRow() {
-    return Consumer<HomeProvider>(
-      builder: (context, provider, child) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: UIUtils.paddingHorizontal(16),
-          child: Row(
-            children: provider.topRestaurants
-                .map(
-                  (restaurant) => TopRestaurantCard(
-                    restaurant: restaurant,
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        NavigationRoute.detailRoute.name,
-                        arguments: restaurant.id ?? "0",
-                      );
-                    },
-                  ),
-                )
-                .toList(),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget buildRestaurantList() {
-    return Padding(
+  Widget buildTopRestaurantRow(
+      {required List<RestaurantEntity> topRestaurants}) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       padding: UIUtils.paddingHorizontal(16),
-      child: Consumer<HomeProvider>(
-        builder: (context, provider, child) {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: provider.restaurants.length,
-            itemBuilder: (context, index) {
-              final RestaurantEntity restaurant = provider.restaurants[index];
-              return RestaurantCard(
+      child: Row(
+        children: topRestaurants
+            .map(
+              (restaurant) => TopRestaurantCard(
                 restaurant: restaurant,
                 onTap: () {
                   Navigator.pushNamed(
                     context,
                     NavigationRoute.detailRoute.name,
-                    arguments: restaurant.id ?? "0",
+                    arguments: restaurant,
                   );
                 },
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget buildRestaurantList({required List<RestaurantEntity> restaurants}) {
+    return Padding(
+      padding: UIUtils.paddingHorizontal(16),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: restaurants.length,
+        itemBuilder: (context, index) {
+          final RestaurantEntity restaurant = restaurants[index];
+          return RestaurantCard(
+            restaurant: restaurant,
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                NavigationRoute.detailRoute.name,
+                arguments: restaurant,
               );
             },
           );
