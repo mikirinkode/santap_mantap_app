@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../data/model/restaurant_detail_model.dart';
 import '../../../../domain/entities/restaurant_entity.dart';
 import '../../../../theme/app_color.dart';
 import '../../../../utils/cache_manager_provider.dart';

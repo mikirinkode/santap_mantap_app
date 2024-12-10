@@ -2,12 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:santap_mantap_app/data/model/menu_model.dart';
-import 'package:santap_mantap_app/data/model/restaurant_detail_model.dart';
-import 'package:santap_mantap_app/data/model/customer_review_model.dart';
 import 'package:santap_mantap_app/domain/entities/customer_review_entity.dart';
 import 'package:santap_mantap_app/domain/entities/menu_entity.dart';
-import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/utils/app_icons.dart';
@@ -15,9 +11,7 @@ import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../utils/image_size.dart';
 import '../../global_widgets/error_state_view.dart';
-import '../../../data/network/api_config.dart';
 import '../../../theme/app_color.dart';
 import '../../../utils/cache_manager_provider.dart';
 import '../../../utils/ui_utils.dart';
@@ -592,7 +586,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                   UIUtils.heightSpace(16),
                   TextField(
                     onChanged: provider.onUserNameChanged,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       label: Text("Nama"),
                     ),
                     textInputAction: TextInputAction.next,
@@ -600,7 +594,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                   UIUtils.heightSpace(16),
                   TextField(
                     onChanged: provider.onUserReviewChanged,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       label: Text("Review"),
                     ),
                     textInputAction: TextInputAction.done,

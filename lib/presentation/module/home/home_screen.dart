@@ -11,7 +11,6 @@ import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../data/model/restaurant_detail_model.dart';
 import '../../../domain/entities/restaurant_entity.dart';
 import '../../../utils/cache_manager_provider.dart';
 import 'widget/restaurant_card.dart';
@@ -78,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildLoadingIndicator() {
     return Skeletonizer(
       child: SingleChildScrollView(
-        physics: ScrollPhysics(),
+        physics: const ScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

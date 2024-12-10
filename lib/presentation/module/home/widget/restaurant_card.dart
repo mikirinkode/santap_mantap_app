@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:santap_mantap_app/utils/cache_manager_provider.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 
-import '../../../../data/model/restaurant_detail_model.dart';
 import '../../../../domain/entities/restaurant_entity.dart';
 import '../../../../theme/app_color.dart';
 

@@ -1,10 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:santap_mantap_app/data/model/restaurant_detail_model.dart';
 import 'package:santap_mantap_app/di/injection.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart';
 
-import '../../../data/network/remote_data_source.dart';
 import '../../../domain/entities/review_entity.dart';
 import '../../../utils/ui_state.dart';
 
