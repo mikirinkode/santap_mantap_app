@@ -26,20 +26,18 @@ class RestaurantCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(16)),
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
                   child: Hero(
                     tag: "restaurant-image-${restaurant.id}",
                     createRectTween: (Rect? begin, Rect? end) {
-                      return MaterialRectCenterArcTween(
-                          begin: begin, end: end);
+                      return MaterialRectCenterArcTween(begin: begin, end: end);
                     },
                     child: CachedNetworkImage(
                       imageUrl: restaurant.pictureUrl ?? "",
@@ -52,10 +50,10 @@ class RestaurantCard extends StatelessWidget {
                         child: CupertinoActivityIndicator(),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        color: AppColor.neutral200,
+                        color: Theme.of(context).cardColor,
                         child: const Icon(
                           Icons.image_not_supported,
-                          color: AppColor.neutral700,
+                          color: AppColor.neutral500,
                         ),
                       ),
                     ),
@@ -68,10 +66,10 @@ class RestaurantCard extends StatelessWidget {
                     children: [
                       Text(
                         restaurant.name ?? "",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                            ),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                       UIUtils.heightSpace(8),
                       Row(

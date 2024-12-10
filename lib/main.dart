@@ -44,6 +44,8 @@ class MyApp extends StatelessWidget {
       title: 'SantapMantap',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme(context),
+      darkTheme: AppTheme.darkTheme(context),
+      themeMode: ThemeMode.system,
       initialRoute: NavigationRoute.mainRoute.name,
       routes: {
         NavigationRoute.mainRoute.name: (context) => const HomeScreen(),

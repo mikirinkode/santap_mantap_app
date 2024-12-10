@@ -44,33 +44,32 @@ class RestaurantDetailProvider extends ChangeNotifier {
     _userReview = value;
   }
 
-Future<void> submitReview({
-  required String restaurantId,
-  required Function onSuccess,
-  required Function onError,
-}) async {
-  debugPrint("Submitting review...");
-  try {
-    isLoadingSubmitReview.value = true;
-    debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
-    
-    final review = ReviewEntity(
-      restaurantId: restaurantId,
-      name: _userName,
-      review: _userReview,
-    );
-    await _repository.postReview(review: review);
+  Future<void> submitReview({
+    required String restaurantId,
+    required Function onSuccess,
+    required Function onError,
+  }) async {
+    debugPrint("Submitting review...");
+    try {
+      isLoadingSubmitReview.value = true;
+      debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
 
-    isLoadingSubmitReview.value = false;
-    debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
-    onSuccess.call();
-    getRestaurantDetail(restaurantId);
-  } catch (e) {
-    debugPrint("Error: $e");
-    isLoadingSubmitReview.value = false;
-    debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
-    onError.call();
+      final review = ReviewEntity(
+        restaurantId: restaurantId,
+        name: _userName,
+        review: _userReview,
+      );
+      await _repository.postReview(review: review);
+
+      isLoadingSubmitReview.value = false;
+      debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
+      onSuccess.call();
+      getRestaurantDetail(restaurantId);
+    } catch (e) {
+      debugPrint("Error: $e");
+      isLoadingSubmitReview.value = false;
+      debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
+      onError.call();
+    }
   }
-}
-
 }

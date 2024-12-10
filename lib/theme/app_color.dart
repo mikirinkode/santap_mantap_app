@@ -3,7 +3,6 @@ import 'dart:ui';
 class AppColor {
   AppColor._();
 
-  static const backgroundColor = Color(0xFFF8FAFF);
   static const primary50 = Color(0xFFFDF1EE);
   static const primary100 = Color(0xFFF8D2CA);
   static const primary300 = Color(0xFFF09E8D);
@@ -14,4 +13,9 @@ class AppColor {
   static const neutral400 = Color(0xFF7786A7);
   static const neutral500 = Color(0xFF556891);
   static const neutral700 = Color(0xFF3C4A67);
+  static const neutral800 = Color(0xFF2F3950);
+  static const neutral900 = Color(0xFF242C3D);
+
+  static const backgroundColor = Color(0xFFF8FAFF);
+  static const darkBackgroundColor = neutral900;
 }

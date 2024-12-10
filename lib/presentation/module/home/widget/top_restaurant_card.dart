@@ -27,7 +27,7 @@ class TopRestaurantCard extends StatelessWidget {
           width: 250,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

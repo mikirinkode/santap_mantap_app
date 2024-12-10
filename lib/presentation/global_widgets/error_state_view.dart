@@ -24,7 +24,7 @@ class ErrorStateView extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               padding: UIUtils.paddingAll(24),
