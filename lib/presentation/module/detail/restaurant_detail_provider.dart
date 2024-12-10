@@ -64,6 +64,7 @@ Future<void> submitReview({
     isLoadingSubmitReview.value = false;
     debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
     onSuccess.call();
+    getRestaurantDetail(restaurantId);
   } catch (e) {
     debugPrint("Error: $e");
     isLoadingSubmitReview.value = false;
