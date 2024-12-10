@@ -16,16 +16,18 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   UIState get state => _state;
 
-  UIState _submitState = InitialState();
+  // UIState _submitState = InitialState();
 
-  UIState get submitState => _submitState;
+  // UIState get submitState => _submitState;
 
   RestaurantDetailEntity? _restaurant;
 
   RestaurantDetailEntity? get restaurant => _restaurant;
 
-  String userName = "";
-  String userReview = "";
+  String _userName = "";
+  String _userReview = "";
+
+  final isLoadingSubmitReview = ValueNotifier<bool>(false);
 
   Future<void> getRestaurantDetail(String id) async {
     _state = UIState.loading();
@@ -41,31 +43,39 @@ class RestaurantDetailProvider extends ChangeNotifier {
   }
 
   void onUserNameChanged(String value) {
-    userName = value;
+    _userName = value;
   }
 
   void onUserReviewChanged(String value) {
-    userReview = value;
+    _userReview = value;
   }
 
-  Future<void> submitReview({
-    required String restaurantId,
-    required Function onSuccess,
-  }) async {
-    _submitState = UIState.loading();
-    notifyListeners();
-    debugPrint("userName: $userName, userReview: $userReview");
-    try {
-      final review = ReviewEntity(
-          restaurantId: restaurantId, name: userName, review: userReview);
-      await _repository.postReview(review: review);
-      getRestaurantDetail(restaurantId);
-      onSuccess.call();
-      _submitState = UIState.success();
-      notifyListeners();
-    } catch (e) {
-      _submitState = UIState.error(e.toString());
-      notifyListeners();
-    }
+Future<void> submitReview({
+  required String restaurantId,
+  required Function onSuccess,
+  required Function onError,
+}) async {
+  debugPrint("Submitting review...");
+  try {
+    isLoadingSubmitReview.value = true;
+    debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
+    
+    final review = ReviewEntity(
+      restaurantId: restaurantId,
+      name: _userName,
+      review: _userReview,
+    );
+    await _repository.postReview(review: review);
+
+    isLoadingSubmitReview.value = false;
+    debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
+    onSuccess.call();
+  } catch (e) {
+    debugPrint("Error: $e");
+    isLoadingSubmitReview.value = false;
+    debugPrint("isLoadingSubmitReview: ${isLoadingSubmitReview.value}");
+    onError.call();
   }
+}
+
 }

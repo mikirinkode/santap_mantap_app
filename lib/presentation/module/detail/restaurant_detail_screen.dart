@@ -63,32 +63,26 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             onSuccess: () => Stack(
               children: [
                 buildContent(restaurant: provider.restaurant),
-                provider.submitState.when(
-                  onInitial: () => const SizedBox(),
-                  onLoading: () => Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColor.primary50,
-                        border:
-                            Border.all(width: 1, color: AppColor.primary500),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      padding: UIUtils.paddingAll(24),
-                      child: const CupertinoActivityIndicator(
-                        radius: 18,
-                      ),
-                    ),
-                  ),
-                  onError: (message) => ErrorStateView(
-                    message: message,
-                    onRetry: () {
-                      provider.submitReview(
-                          restaurantId: widget.restaurantId,
-                          onSuccess:_showSuccessSnackbar);
-                    },
-                  ),
-                  onSuccess: () => const SizedBox(),
-                )
+                ValueListenableBuilder<bool>(
+                  valueListenable: provider.isLoadingSubmitReview,
+                  builder: (context, isLoading, child) {
+                    return isLoading
+                        ? Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColor.primary50,
+                                border: Border.all(
+                                    width: 1, color: AppColor.primary500),
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              padding: UIUtils.paddingAll(24),
+                              child:
+                                  const CupertinoActivityIndicator(radius: 18),
+                            ),
+                          )
+                        : const SizedBox();
+                  },
+                ),
               ],
             ),
           );
@@ -585,7 +579,11 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               TextButton(
                 child: const Text('Kirim'),
                 onPressed: () {
-                  provider.submitReview(restaurantId: widget.restaurantId, onSuccess: _showSuccessSnackbar);
+                  provider.submitReview(
+                    restaurantId: widget.restaurantId,
+                    onSuccess: _showSuccessSnackbar,
+                    onError: _showErrorSnackbar,
+                  );
                   Navigator.of(context).pop();
                 },
               ),
@@ -596,9 +594,15 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     );
   }
 
-  _showSuccessSnackbar(){
+  _showSuccessSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Review berhasil dikirim')),
+    );
+  }
+
+  _showErrorSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Review gagal dikirim')),
     );
   }
 }
