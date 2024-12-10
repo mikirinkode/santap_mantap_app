@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../utils/ui_utils.dart';
@@ -38,9 +39,9 @@ class AppTheme {
         filled: true,
         fillColor: Colors.white,
       ),
-      textTheme: Theme.of(context).textTheme.apply(
-            bodyColor: AppColor.neutral700,
-          ),
+      textTheme: GoogleFonts.nunitoTextTheme().apply(
+        bodyColor: AppColor.neutral700,
+      ),
       iconTheme: const IconThemeData(
         color: AppColor.neutral700,
       ),
@@ -82,9 +83,9 @@ class AppTheme {
         filled: true,
         fillColor: AppColor.neutral800,
       ),
-      textTheme: Theme.of(context).textTheme.apply(
-            bodyColor: Colors.white,
-          ),
+      textTheme: GoogleFonts.nunitoTextTheme().apply(
+        bodyColor: Colors.white,
+      ),
       iconTheme: const IconThemeData(
         color: Colors.white,
       ),
