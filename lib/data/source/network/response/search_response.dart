@@ -1,4 +1,4 @@
-import '../../model/restaurant_model.dart';
+import '../../../model/restaurant_model.dart';
 
 class SearchResponse {
   final bool error;

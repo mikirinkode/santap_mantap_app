@@ -1,4 +1,4 @@
-import '../../../domain/entities/review_entity.dart';
+import '../../../../domain/entities/review_entity.dart';
 
 class ReviewBody {
   final String restaurantId;

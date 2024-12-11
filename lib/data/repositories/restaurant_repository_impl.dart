@@ -1,11 +1,11 @@
-import 'package:santap_mantap_app/data/network/remote_data_source.dart';
+import 'package:santap_mantap_app/data/source/network/remote_data_source.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/domain/entities/review_entity.dart';
 
 import '../../domain/repositories/restaurant_repository.dart';
-import '../network/body/review_body.dart';
+import '../source/network/body/review_body.dart';
 
 class RestaurantRepositoryImpl implements RestaurantRepository {
   

@@ -121,55 +121,60 @@ class _HomeScreenState extends State<HomeScreen> {
         right: 16,
         bottom: 0,
       ),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: UIUtils.paddingAll(16),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16.0),
-              child: CachedNetworkImage(
-                imageUrl:
-                    "https://avatars.githubusercontent.com/u/69853015?v=4",
-                width: 45,
-                height: 45,
-                fit: BoxFit.cover,
-                cacheManager: CacheMangerProvider.restaurantImage,
-                placeholder: (context, url) => const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: CupertinoActivityIndicator(),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  color: AppColor.neutral200,
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    color: AppColor.neutral700,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, NavigationRoute.settingRoute.name);
+        },
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: UIUtils.paddingAll(16),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://avatars.githubusercontent.com/u/69853015?v=4",
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.cover,
+                  cacheManager: CacheMangerProvider.restaurantImage,
+                  placeholder: (context, url) => const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: AppColor.neutral200,
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      color: AppColor.neutral700,
+                    ),
                   ),
                 ),
               ),
-            ),
-            UIUtils.widthSpace(8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Selamat Datang,",
-                  style: TextStyle(
-                    fontSize: 12,
+              UIUtils.widthSpace(8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Selamat Datang,",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                UIUtils.heightSpace(4),
-                const Text(
-                  "Wafa Al Ausath",
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            )
-          ],
+                  UIUtils.heightSpace(4),
+                  const Text(
+                    "Wafa Al Ausath",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -183,36 +188,56 @@ class _HomeScreenState extends State<HomeScreen> {
         right: 16,
         bottom: 0,
       ),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, NavigationRoute.searchRoute.name);
-        },
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(width: 1, color: AppColor.neutral200),
-          ),
-          padding: UIUtils.paddingAll(16),
-          child: Row(
-            children: [
-              const Icon(
-                CupertinoIcons.search,
-                size: 18,
-              ),
-              UIUtils.widthSpace(12),
-              const Text(
-                "Cari Restoran",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                  color: AppColor.neutral200,
+      child: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, NavigationRoute.searchRoute.name);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(width: 1, color: AppColor.neutral200),
+                ),
+                padding: UIUtils.paddingAll(16),
+                child: Row(
+                  children: [
+                    const Icon(
+                      CupertinoIcons.search,
+                      size: 18,
+                    ),
+                    UIUtils.widthSpace(12),
+                    const Text(
+                      "Cari Restoran",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        color: AppColor.neutral200,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          UIUtils.widthSpace(16),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, NavigationRoute.favoriteRoute.name);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                shape: BoxShape.circle,
+                border: Border.all(width: 1, color: AppColor.neutral200),
+              ),
+              padding: UIUtils.paddingAll(12),
+              child: const Icon(CupertinoIcons.heart_fill),
+            ),
+          ),
+        ],
       ),
     );
   }

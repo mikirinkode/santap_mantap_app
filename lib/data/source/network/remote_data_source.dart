@@ -1,10 +1,10 @@
 import 'package:santap_mantap_app/data/model/restaurant_detail_model.dart';
-import 'package:santap_mantap_app/data/network/api_config.dart';
-import 'package:santap_mantap_app/data/network/api_handler.dart';
-import 'package:santap_mantap_app/data/network/response/post_review_response.dart';
-import 'package:santap_mantap_app/data/network/response/search_response.dart';
+import 'package:santap_mantap_app/data/source/network/api_config.dart';
+import 'package:santap_mantap_app/data/source/network/api_handler.dart';
+import 'package:santap_mantap_app/data/source/network/response/post_review_response.dart';
+import 'package:santap_mantap_app/data/source/network/response/search_response.dart';
 
-import '../model/restaurant_model.dart';
+import '../../model/restaurant_model.dart';
 import 'body/review_body.dart';
 import 'response/restaurant_detail_response.dart';
 import 'response/restaurant_list_response.dart';
