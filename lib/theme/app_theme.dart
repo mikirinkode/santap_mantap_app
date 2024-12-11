@@ -55,11 +55,11 @@ class AppTheme {
   static darkTheme(BuildContext context) {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColor.primary500,
-        primary: AppColor.primary500,
+        seedColor: AppColor.primary400,
+        primary: AppColor.primary400,
         brightness: Brightness.dark,
       ),
-      primaryColor: AppColor.primary500,
+      primaryColor: AppColor.primary400,
       scaffoldBackgroundColor: AppColor.darkBackgroundColor,
       useMaterial3: true,
       appBarTheme: const AppBarTheme(
@@ -90,8 +90,12 @@ class AppTheme {
         color: Colors.white,
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColor.primary300,
+        backgroundColor: AppColor.primary400,
         foregroundColor: AppColor.neutral700,
+        extendedTextStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       extensions: [
         const SkeletonizerConfigData().copyWith(

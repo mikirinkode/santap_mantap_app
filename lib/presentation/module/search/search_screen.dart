@@ -28,82 +28,80 @@ class _SearchScreenState extends State<SearchScreen> {
         title: const Text("Pencarian"),
         scrolledUnderElevation: 0,
       ),
-      body: SafeArea(
-        child: Consumer<SearchProvider>(
-          builder: (context, provider, child) {
-            return Column(
-              children: [
-                Padding(
-                  padding: UIUtils.paddingFromLTRB(
-                    left: 16,
-                    top: 16,
-                    right: 16,
-                    bottom: 0,
+      body: Consumer<SearchProvider>(
+        builder: (context, provider, child) {
+          return Column(
+            children: [
+              Padding(
+                padding: UIUtils.paddingFromLTRB(
+                  left: 16,
+                  top: 16,
+                  right: 16,
+                  bottom: 0,
+                ),
+                child: TextField(
+                  onChanged: (value) => {
+                    provider.onSearchInputChanged(query: value),
+                  },
+                  keyboardType: TextInputType.text,
+                  canRequestFocus: true,
+                  textInputAction: TextInputAction.search,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(
+                      CupertinoIcons.search,
+                      size: 18,
+                    ),
+                    hintText: "Cari restoran",
+                    hintStyle: TextStyle(
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      color: AppColor.neutral200,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
-                  child: TextField(
-                    onChanged: (value) => {
-                      provider.onSearchInputChanged(query: value),
+                ),
+              ),
+              provider.state.when(
+                onInitial: () => Expanded(child: buildInitialSearchInfo()),
+                onLoading: () => Flexible(child: buildLoadingIndicator()),
+                onError: (message) => Expanded(
+                  child: ErrorStateView(
+                    message: message,
+                    onRetry: () {
+                      provider.searchRestaurants();
                     },
-                    keyboardType: TextInputType.text,
-                    canRequestFocus: true,
-                    textInputAction: TextInputAction.search,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(
-                        CupertinoIcons.search,
-                        size: 18,
-                      ),
-                      hintText: "Cari restoran",
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        color: AppColor.neutral200,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
                   ),
                 ),
-                provider.state.when(
-                  onInitial: () => Expanded(child: buildInitialSearchInfo()),
-                  onLoading: () => Flexible(child: buildLoadingIndicator()),
-                  onError: (message) => Expanded(
-                    child: ErrorStateView(
-                      message: message,
-                      onRetry: () {
-                        provider.searchRestaurants();
-                      },
-                    ),
-                  ),
-                  onSuccess: () => provider.restaurants.isEmpty
-                      ? const Expanded(
-                          child: EmptyStateView(
-                            message:
-                                "Pencarian tidak ditemukan, coba lagi dengan kata kunci lain.",
-                          ),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                            itemCount: provider.restaurants.length,
-                            padding: UIUtils.paddingTop(16),
-                            itemBuilder: (context, index) {
-                              return RestaurantCard(
-                                restaurant: provider.restaurants[index],
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    NavigationRoute.detailRoute.name,
-                                    arguments: provider.restaurants[index].id,
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                onSuccess: () => provider.restaurants.isEmpty
+                    ? const Expanded(
+                        child: EmptyStateView(
+                          message:
+                              "Pencarian tidak ditemukan, coba lagi dengan kata kunci lain.",
                         ),
-                ),
-              ],
-            );
-          },
-        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: provider.restaurants.length,
+                          padding: UIUtils.paddingTop(16),
+                          itemBuilder: (context, index) {
+                            return RestaurantCard(
+                              restaurant: provider.restaurants[index],
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  NavigationRoute.detailRoute.name,
+                                  arguments: provider.restaurants[index],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

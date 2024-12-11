@@ -2,7 +2,7 @@ enum NavigationRoute {
   mainRoute("/main"),
   detailRoute("/detail"),
   favoriteRoute("/favorite"),
-  settingRoute("/favorite"),
+  settingRoute("/setting"),
   searchRoute("/search");
 
   const NavigationRoute(this.name);

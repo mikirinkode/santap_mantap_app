@@ -30,6 +30,17 @@ class RestaurantModel {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'description': description,
+      'city': city,
+      'pictureId': pictureId,
+      'rating': rating,
+    };
+  }
+
   String getPictureUrl() {
     if (pictureId == null || pictureId!.isEmpty) {
       return '';
@@ -47,6 +58,17 @@ class RestaurantModel {
       pictureId: pictureId,
       rating: rating,
       pictureUrl: getPictureUrl(),
+    );
+  }
+
+  factory RestaurantModel.fromEntity(RestaurantEntity entity) {
+    return RestaurantModel(
+      id: entity.id,
+      name: entity.name,
+      description: entity.description,
+      city: entity.city,
+      pictureId: entity.pictureId,
+      rating: entity.rating,
     );
   }
 }

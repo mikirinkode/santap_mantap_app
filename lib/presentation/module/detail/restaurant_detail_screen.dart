@@ -41,35 +41,42 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<RestaurantDetailProvider>(
-        builder: (context, provider, child) {
-          return Stack(
-            children: [
-              buildContent(),
-              ValueListenableBuilder<bool>(
-                valueListenable: provider.isLoadingSubmitReview,
-                builder: (context, isLoading, child) {
-                  return isLoading
-                      ? Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              border: Border.all(
-                                  width: 1, color: AppColor.primary500),
-                              borderRadius: BorderRadius.circular(24),
+    return Consumer<RestaurantDetailProvider>(
+      builder: (context, provider, child) {
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, Object? _) async {
+            Navigator.pop(context, provider.shouldRefreshPreviousScreen);
+          },
+          child: Scaffold(
+            body: Stack(
+              children: [
+                buildContent(),
+                ValueListenableBuilder<bool>(
+                  valueListenable: provider.isLoadingSubmitReview,
+                  builder: (context, isLoading, child) {
+                    return isLoading
+                        ? Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                border: Border.all(
+                                    width: 1, color: AppColor.primary500),
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              padding: UIUtils.paddingAll(24),
+                              child:
+                                  const CupertinoActivityIndicator(radius: 18),
                             ),
-                            padding: UIUtils.paddingAll(24),
-                            child: const CupertinoActivityIndicator(radius: 18),
-                          ),
-                        )
-                      : const SizedBox();
-                },
-              ),
-            ],
-          );
-        },
-      ),
+                          )
+                        : const SizedBox();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -150,16 +157,41 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
           SafeArea(
             child: Padding(
               padding: UIUtils.paddingAll(16),
-              child: FloatingActionButton.small(
-                heroTag: "back-button",
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                backgroundColor: Colors.white,
-                child: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: AppColor.neutral700,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FloatingActionButton.small(
+                    heroTag: "back-button",
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    backgroundColor: Colors.white,
+                    child: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppColor.neutral700,
+                    ),
+                  ),
+                  Visibility(
+                    visible: provider.state is SuccessState,
+                    child: FloatingActionButton.small(
+                      heroTag: "favorite-button",
+                      onPressed: () {
+                        provider.toggleFavorite(onSuccess: (message) {
+                          _showSnackbar(message: message);
+                        }, onFailed: (message) {
+                          _showSnackbar(message: message);
+                        });
+                      },
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: Icon(
+                        provider.isFavorite
+                            ? CupertinoIcons.heart_fill
+                            : CupertinoIcons.heart,
+                        // color: AppColor.neutral700,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -611,8 +643,12 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 onPressed: () {
                   provider.submitReview(
                     restaurantId: widget.restaurantArg.id,
-                    onSuccess: _showSuccessSnackbar,
-                    onError: _showErrorSnackbar,
+                    onSuccess: () {
+                      _showSnackbar(message: 'Review berhasil dikirim');
+                    },
+                    onError: () {
+                      _showSnackbar(message: 'Review gagal dikirim');
+                    },
                   );
                   Navigator.of(context).pop();
                 },
@@ -624,15 +660,9 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
     );
   }
 
-  _showSuccessSnackbar() {
+  _showSnackbar({required String message}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Review berhasil dikirim')),
-    );
-  }
-
-  _showErrorSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Review gagal dikirim')),
+      SnackBar(content: Text(message)),
     );
   }
 }

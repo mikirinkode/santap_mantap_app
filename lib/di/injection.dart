@@ -1,3 +1,4 @@
+import 'package:santap_mantap_app/data/source/local/sqlite_service.dart';
 import 'package:santap_mantap_app/data/source/network/remote_data_source.dart';
 import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,8 @@ class Injection {
 
   SharedPreferencesService? _sharedPreferencesService;
 
+  SqliteService? _sqliteService;
+
   Injection._internal() {
     _instance = this;
   }
@@ -21,6 +24,8 @@ class Injection {
   initialize() async {
     final remoteDataSource = RemoteDataSource();
     final sharedPreferences = await SharedPreferences.getInstance();
+
+    _sqliteService = SqliteService();
 
     _restaurantRepository = RestaurantRepositoryImpl(
       remoteDataSource: remoteDataSource,
@@ -34,4 +39,6 @@ class Injection {
   RestaurantRepository get restaurantRepository => _restaurantRepository!;
 
   SharedPreferencesService get sharedPreferencesService => _sharedPreferencesService!;
+
+  SqliteService get sqliteService => _sqliteService!;
 }
