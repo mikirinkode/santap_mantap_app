@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:santap_mantap_app/domain/entities/menu_entity.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/utils/app_icons.dart';
+import 'package:santap_mantap_app/utils/build_context.dart';
 import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -37,6 +40,13 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             widget.restaurantArg.id,
           );
     });
+    context.read<RestaurantDetailProvider>().attachListener();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // context.read<RestaurantDetailProvider>().detachListener();
   }
 
   @override
@@ -46,6 +56,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (bool didPop, Object? _) async {
+            // provider.resetState();
             Navigator.pop(context, provider.shouldRefreshPreviousScreen);
           },
           child: Scaffold(
@@ -92,28 +103,42 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             ),
             child: Hero(
               tag: "restaurant-image-${widget.restaurantArg.id}",
-              child: CachedNetworkImage(
-                imageUrl: widget.restaurantArg.pictureUrl ?? "",
-                height: 300,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                cacheManager: CacheMangerProvider.restaurantImage,
-                placeholder: (context, url) => const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: CupertinoActivityIndicator(),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  color: AppColor.neutral200,
-                  child: const Icon(
-                    Icons.image_not_supported,
-                    color: AppColor.neutral700,
+              child: Stack(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: widget.restaurantArg.pictureUrl ?? "",
+                    height: provider.imageHeight.value,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    cacheManager: CacheMangerProvider.restaurantImage,
+                    placeholder: (context, url) => const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: CupertinoActivityIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: AppColor.neutral200,
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        color: AppColor.neutral700,
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned.fill(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: provider.imageBlur.value,
+                        sigmaY: provider.imageBlur.value,
+                      ),
+                      child: Container(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           SafeArea(
             child: SingleChildScrollView(
+              controller: provider.scrollController,
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
               ),
@@ -129,26 +154,43 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 onSuccess: () => Column(
                   children: [
                     UIUtils.heightSpace(200),
-                    buildBasicInfoSection(
-                      name: provider.restaurant?.name ?? "",
-                      address:
-                          "${provider.restaurant?.address ?? ""}, ${provider.restaurant?.city ?? ""}",
-                      rating: widget.restaurantArg.rating ?? 0.0,
-                    ),
-                    buildMenuSection(
-                      menu: provider.restaurant?.menus ??
-                          MenuEntity(
-                            foods: [],
-                            drinks: [],
+                    Padding(
+                      padding: UIUtils.paddingHorizontal(8),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
                           ),
+                        ),
+                        child: Column(
+                          children: [
+                            buildBasicInfoSection(
+                              name: provider.restaurant?.name ?? "",
+                              address:
+                                  "${provider.restaurant?.address ?? ""}, ${provider.restaurant?.city ?? ""}",
+                              rating: widget.restaurantArg.rating ?? 0.0,
+                            ),
+                            buildMenuSection(
+                              menu: provider.restaurant?.menus ??
+                                  MenuEntity(
+                                    foods: [],
+                                    drinks: [],
+                                  ),
+                            ),
+                            buildAboutSection(
+                              about: provider.restaurant?.description ?? "",
+                            ),
+                            buildReviewSection(
+                              reviews:
+                                  provider.restaurant?.customerReviews ?? [],
+                            ),
+                            UIUtils.heightSpace(72),
+                          ],
+                        ),
+                      ),
                     ),
-                    buildAboutSection(
-                      about: provider.restaurant?.description ?? "",
-                    ),
-                    buildReviewSection(
-                      reviews: provider.restaurant?.customerReviews ?? [],
-                    ),
-                    UIUtils.heightSpace(72),
                   ],
                 ),
               ),
@@ -163,6 +205,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                   FloatingActionButton.small(
                     heroTag: "back-button",
                     onPressed: () {
+                      // provider.resetState();
                       Navigator.pop(context, true);
                     },
                     backgroundColor: Colors.white,
@@ -229,21 +272,37 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
       child: Column(
         children: [
           UIUtils.heightSpace(200),
-          buildBasicInfoSection(
-            name: "Name",
-            address: "Restaurant address",
-            rating: 0.0,
+          Padding(
+            padding: UIUtils.paddingHorizontal(8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                children: [
+                  buildBasicInfoSection(
+                    name: "Name",
+                    address: "Restaurant address",
+                    rating: 0.0,
+                  ),
+                  buildMenuSection(
+                    menu: UiLoadingDummyData.dummyMenu,
+                  ),
+                  buildAboutSection(
+                    about: UiLoadingDummyData.description,
+                  ),
+                  buildReviewSection(
+                    reviews: UiLoadingDummyData.dummyCustomerReviews,
+                  ),
+                  UIUtils.heightSpace(72),
+                ],
+              ),
+            ),
           ),
-          buildMenuSection(
-            menu: UiLoadingDummyData.dummyMenu,
-          ),
-          buildAboutSection(
-            about: UiLoadingDummyData.description,
-          ),
-          buildReviewSection(
-            reviews: UiLoadingDummyData.dummyCustomerReviews,
-          ),
-          UIUtils.heightSpace(72),
         ],
       ),
     );
@@ -451,7 +510,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
           color: Theme.of(context).cardColor,
           border: Border.all(
             width: 1,
-            color: AppColor.neutral100,
+            color: Theme.of(context).dividerColor,
           ),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -462,7 +521,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: AppColor.neutral50,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
@@ -470,7 +529,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 (isFood) ? AppIcons.food : AppIcons.drink,
                 width: 24,
                 height: 24,
-                color: AppColor.neutral700,
+                color: AppColor.neutral400,
               ),
             ),
             UIUtils.heightSpace(8),
@@ -598,7 +657,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
           Container(
             width: double.infinity,
             height: 1,
-            color: AppColor.neutral50,
+            color: Theme.of(context).dividerColor,
           ),
         ],
       ),

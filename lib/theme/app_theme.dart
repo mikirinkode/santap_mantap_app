@@ -17,12 +17,13 @@ class AppTheme {
       ),
       primaryColor: AppColor.primary500,
       scaffoldBackgroundColor: AppColor.backgroundColor,
+      cardColor: Colors.white,
+      dividerColor: AppColor.neutral100,
       useMaterial3: true,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-      cardColor: Colors.white,
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: const TextStyle(color: AppColor.neutral200),
         labelStyle: const TextStyle(color: AppColor.neutral500),
@@ -61,12 +62,13 @@ class AppTheme {
       ),
       primaryColor: AppColor.primary400,
       scaffoldBackgroundColor: AppColor.darkBackgroundColor,
+      cardColor: AppColor.neutral800,
+      dividerColor: AppColor.neutral500,
       useMaterial3: true,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColor.neutral800,
         centerTitle: true,
       ),
-      cardColor: AppColor.neutral800,
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: const TextStyle(color: AppColor.neutral200),
         labelStyle: const TextStyle(color: AppColor.neutral200),

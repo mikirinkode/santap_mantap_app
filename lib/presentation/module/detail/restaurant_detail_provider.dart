@@ -4,6 +4,7 @@ import 'package:santap_mantap_app/di/injection.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart';
+import 'package:santap_mantap_app/utils/build_context.dart';
 
 import '../../../data/model/restaurant_model.dart';
 import '../../../domain/entities/review_entity.dart';
@@ -36,12 +37,25 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   bool get shouldRefreshPreviousScreen => _shouldRefreshPreviousScreen;
 
+  final _scrollController = ScrollController();
+
+  ScrollController get scrollController => _scrollController;
+
+  final imageHeight = ValueNotifier<double>(600);
+  final imageBlur = ValueNotifier<double>(0);
+
+  final BuildContext _context;
+
+  RestaurantDetailProvider({required BuildContext context})
+      : _context = context;
+
+
   Future<void> getRestaurantDetail(String id) async {
+    resetState();
     _state = UIState.loading();
     notifyListeners();
     try {
       _restaurant = await _repository.getRestaurantDetail(id);
-      _shouldRefreshPreviousScreen = false;
       _checkIsFavorite();
       _state = UIState.success();
       notifyListeners();
@@ -133,6 +147,57 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   Future<void> _checkIsFavorite() async {
     _isFavorite = await _service.contain(restaurant?.id ?? "");
+    notifyListeners();
+  }
+
+  void attachListener() {
+    _scrollController.addListener(onScrollChanged);
+  }
+
+  void detachListener() {
+    _scrollController.removeListener(onScrollChanged);
+  }
+
+  void onScrollChanged() async {
+    debugPrint("offset: ${_scrollController.offset}");
+    debugPrint(
+        "minScrollExtent: ${_scrollController.position.minScrollExtent}");
+    debugPrint(
+        "maxScrollExtent: ${_scrollController.position.maxScrollExtent}");
+
+    final offset = _scrollController.offset;
+    const minHeight = 300.0;
+    final maxHeight = _context.height;
+
+    final minBlur = 0.0;
+    final maxBlur = 10.0;
+
+    final minScrollExtent = _scrollController.position.minScrollExtent;
+    final maxScrollExtent = _scrollController.position.maxScrollExtent;
+
+    if (offset <= minScrollExtent) {
+      imageHeight.value = minHeight;
+      imageBlur.value = minBlur;
+      notifyListeners();
+    } else if (offset >= maxScrollExtent) {
+      imageHeight.value = maxHeight;
+      imageBlur.value = maxBlur;
+      notifyListeners();
+    } else {
+      // Calculate proportional height
+      final progress =
+          (offset - minScrollExtent) / (maxScrollExtent - minScrollExtent);
+      imageHeight.value = minHeight + (maxHeight - minHeight) * progress;
+      imageBlur.value = minBlur + (maxBlur - minBlur) * progress;
+      notifyListeners();
+    }
+  }
+
+  void resetState() {
+    imageBlur.value = 0.0;
+    imageHeight.value = 300.0;
+    _isFavorite = false;
+    _shouldRefreshPreviousScreen = false;
     notifyListeners();
   }
 }

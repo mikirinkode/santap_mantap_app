@@ -29,7 +29,7 @@ Future<void> main() async {
           create: (_) => HomeProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => RestaurantDetailProvider(),
+          create: (context) => RestaurantDetailProvider(context: context),
         ),
         ChangeNotifierProvider(
           create: (_) => SearchProvider(),
