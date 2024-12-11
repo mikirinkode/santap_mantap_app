@@ -8,6 +8,7 @@ import 'package:santap_mantap_app/domain/entities/customer_review_entity.dart';
 import 'package:santap_mantap_app/domain/entities/menu_entity.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
+import 'package:santap_mantap_app/presentation/module/detail/widget/menu_card.dart';
 import 'package:santap_mantap_app/utils/app_icons.dart';
 import 'package:santap_mantap_app/utils/build_context.dart';
 import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
@@ -18,6 +19,7 @@ import '../../global_widgets/error_state_view.dart';
 import '../../../theme/app_color.dart';
 import '../../../utils/cache_manager_provider.dart';
 import '../../../utils/ui_utils.dart';
+import 'widget/review_card.dart';
 
 class RestaurantDetailScreen extends StatefulWidget {
   final RestaurantEntity restaurantArg;
@@ -46,7 +48,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
   @override
   void dispose() {
     super.dispose();
-    // context.read<RestaurantDetailProvider>().detachListener();
+    context.read<RestaurantDetailProvider>().detachListener();
   }
 
   @override
@@ -56,35 +58,10 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (bool didPop, Object? _) async {
-            // provider.resetState();
             Navigator.pop(context, provider.shouldRefreshPreviousScreen);
           },
           child: Scaffold(
-            body: Stack(
-              children: [
-                buildContent(),
-                ValueListenableBuilder<bool>(
-                  valueListenable: provider.isLoadingSubmitReview,
-                  builder: (context, isLoading, child) {
-                    return isLoading
-                        ? Center(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                border: Border.all(
-                                    width: 1, color: AppColor.primary500),
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              padding: UIUtils.paddingAll(24),
-                              child:
-                                  const CupertinoActivityIndicator(radius: 18),
-                            ),
-                          )
-                        : const SizedBox();
-                  },
-                ),
-              ],
-            ),
+            body: buildContent(),
           ),
         );
       },
@@ -93,101 +70,158 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
 
   Widget buildContent() {
     return Consumer<RestaurantDetailProvider>(
-        builder: (context, provider, child) {
-      return Stack(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(24),
-              bottomRight: Radius.circular(24),
-            ),
-            child: Hero(
-              tag: "restaurant-image-${widget.restaurantArg.id}",
-              child: Stack(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: widget.restaurantArg.pictureUrl ?? "",
-                    height: provider.imageHeight.value,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    cacheManager: CacheMangerProvider.restaurantImage,
-                    placeholder: (context, url) => const Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: CupertinoActivityIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColor.neutral200,
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        color: AppColor.neutral700,
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: provider.imageBlur.value,
-                        sigmaY: provider.imageBlur.value,
-                      ),
-                      child: Container(),
-                    ),
-                  ),
-                ],
+      builder: (context, provider, child) {
+        return Stack(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24),
               ),
-            ),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              controller: provider.scrollController,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
-              child: provider.state.when(
-                onInitial: () => const SizedBox(),
-                onLoading: () => buildLoadingIndicator(),
-                onError: (message) => ErrorStateView(
-                  message: message,
-                  onRetry: () {
-                    provider.getRestaurantDetail(widget.restaurantArg.id);
-                  },
-                ),
-                onSuccess: () => Column(
+              child: Hero(
+                tag: "restaurant-image-${widget.restaurantArg.id}",
+                child: Stack(
                   children: [
-                    UIUtils.heightSpace(200),
-                    Padding(
-                      padding: UIUtils.paddingHorizontal(8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                          ),
+                    CachedNetworkImage(
+                      imageUrl: widget.restaurantArg.pictureUrl ?? "",
+                      height: provider.imageHeight.value,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      cacheManager: CacheMangerProvider.restaurantImage,
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: CupertinoActivityIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: AppColor.neutral200,
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          color: AppColor.neutral700,
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: provider.imageBlur.value,
+                          sigmaY: provider.imageBlur.value,
+                        ),
+                        child: Container(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: UIUtils.paddingHorizontal(8),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  child: SingleChildScrollView(
+                    controller: provider.scrollController,
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    child: provider.state.when(
+                      onInitial: () => const SizedBox(),
+                      onLoading: () => buildLoadingIndicator(),
+                      onError: (message) => ErrorStateView(
+                        message: message,
+                        onRetry: () {
+                          provider.getRestaurantDetail(widget.restaurantArg.id);
+                        },
+                      ),
+                      onSuccess: () => ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          topRight: Radius.circular(24),
                         ),
                         child: Column(
                           children: [
-                            buildBasicInfoSection(
-                              name: provider.restaurant?.name ?? "",
-                              address:
-                                  "${provider.restaurant?.address ?? ""}, ${provider.restaurant?.city ?? ""}",
-                              rating: widget.restaurantArg.rating ?? 0.0,
-                            ),
-                            buildMenuSection(
-                              menu: provider.restaurant?.menus ??
-                                  MenuEntity(
-                                    foods: [],
-                                    drinks: [],
+                            UIUtils.heightSpace(200),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(24),
+                                  topRight: Radius.circular(24),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  buildBasicInfoSection(
+                                    name: provider.restaurant?.name ?? "",
+                                    address:
+                                        "${provider.restaurant?.address ?? ""}, ${provider.restaurant?.city ?? ""}",
+                                    rating: widget.restaurantArg.rating ?? 0.0,
                                   ),
+                                  buildMenuSection(
+                                    menu: provider.restaurant?.menus ??
+                                        MenuEntity(
+                                          foods: [],
+                                          drinks: [],
+                                        ),
+                                  ),
+                                  buildAboutSection(
+                                    about:
+                                        provider.restaurant?.description ?? "",
+                                  ),
+                                  buildReviewSection(
+                                    reviews:
+                                        provider.restaurant?.customerReviews ??
+                                            [],
+                                  ),
+                                  UIUtils.heightSpace(72),
+                                ],
+                              ),
                             ),
-                            buildAboutSection(
-                              about: provider.restaurant?.description ?? "",
-                            ),
-                            buildReviewSection(
-                              reviews:
-                                  provider.restaurant?.customerReviews ?? [],
-                            ),
-                            UIUtils.heightSpace(72),
                           ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: UIUtils.paddingSymmetric(vertical: 16, horizontal: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FloatingActionButton.small(
+                      heroTag: "back-button",
+                      onPressed: () {
+                        // provider.resetState();
+                        Navigator.pop(context, true);
+                      },
+                      backgroundColor: Colors.white,
+                      child: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColor.neutral700,
+                      ),
+                    ),
+                    Visibility(
+                      visible: provider.state is SuccessState,
+                      child: FloatingActionButton.small(
+                        heroTag: "favorite-button",
+                        onPressed: () {
+                          provider.toggleFavorite(onSuccess: (message) {
+                            _showSnackbar(message: message);
+                          }, onFailed: (message) {
+                            _showSnackbar(message: message);
+                          });
+                        },
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: Icon(
+                          provider.isFavorite
+                              ? CupertinoIcons.heart_fill
+                              : CupertinoIcons.heart,
+                          // color: AppColor.neutral700,
                         ),
                       ),
                     ),
@@ -195,76 +229,48 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: UIUtils.paddingAll(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FloatingActionButton.small(
-                    heroTag: "back-button",
+            Visibility(
+              visible: provider.state is SuccessState,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: UIUtils.paddingAll(24),
+                  child: FloatingActionButton.extended(
+                    heroTag: "add-review-button",
                     onPressed: () {
-                      // provider.resetState();
-                      Navigator.pop(context, true);
+                      _showAddReviewDialog();
                     },
-                    backgroundColor: Colors.white,
-                    child: const Icon(
-                      Icons.arrow_back_rounded,
-                      color: AppColor.neutral700,
+                    label: Row(
+                      children: [
+                        const Icon(Icons.edit_note_sharp),
+                        UIUtils.widthSpace(8),
+                        const Text(
+                          "Tulis Review",
+                        ),
+                      ],
                     ),
-                  ),
-                  Visibility(
-                    visible: provider.state is SuccessState,
-                    child: FloatingActionButton.small(
-                      heroTag: "favorite-button",
-                      onPressed: () {
-                        provider.toggleFavorite(onSuccess: (message) {
-                          _showSnackbar(message: message);
-                        }, onFailed: (message) {
-                          _showSnackbar(message: message);
-                        });
-                      },
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Icon(
-                        provider.isFavorite
-                            ? CupertinoIcons.heart_fill
-                            : CupertinoIcons.heart,
-                        // color: AppColor.neutral700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Visibility(
-            visible: provider.state is SuccessState,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: UIUtils.paddingAll(24),
-                child: FloatingActionButton.extended(
-                  heroTag: "add-review-button",
-                  onPressed: () {
-                    _showAddReviewDialog();
-                  },
-                  label: Row(
-                    children: [
-                      const Icon(Icons.edit_note_sharp),
-                      UIUtils.widthSpace(8),
-                      const Text(
-                        "Tulis Review",
-                      ),
-                    ],
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+            Visibility(
+              visible: provider.isLoadingSubmitReview.value,
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    border: Border.all(width: 1, color: AppColor.primary500),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  padding: UIUtils.paddingAll(24),
+                  child: const CupertinoActivityIndicator(radius: 18),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget buildLoadingIndicator() {
@@ -436,7 +442,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               child: Row(
                 children: menu.foods
                         ?.map(
-                          (food) => buildMenuCard(
+                          (food) => MenuCard(
                             name: food.name ?? "",
                             isFood: true,
                           ),
@@ -484,7 +490,7 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
               child: Row(
                 children: menu.drinks
                         ?.map(
-                          (drink) => buildMenuCard(
+                          (drink) => MenuCard(
                             name: drink.name ?? "",
                             isFood: false,
                           ),
@@ -495,53 +501,6 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget buildMenuCard({
-    required String name,
-    required bool isFood,
-  }) {
-    return Padding(
-      padding: UIUtils.paddingRight(16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          border: Border.all(
-            width: 1,
-            color: Theme.of(context).dividerColor,
-          ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: UIUtils.paddingAll(16),
-        child: Column(
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              alignment: Alignment.center,
-              child: Image.asset(
-                (isFood) ? AppIcons.food : AppIcons.drink,
-                width: 24,
-                height: 24,
-                color: AppColor.neutral400,
-              ),
-            ),
-            UIUtils.heightSpace(8),
-            SizedBox(
-              width: 100,
-              child: Text(
-                name,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -604,62 +563,12 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
             Column(
               children: reviews
                   .map(
-                    (review) => buildReviewCard(review: review),
+                    (review) => ReviewCard(review: review),
                   )
                   .toList(),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildReviewCard({required CustomerReviewEntity review}) {
-    return Padding(
-      padding: UIUtils.paddingBottom(16),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: AppColor.neutral50,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: UIUtils.paddingAll(8),
-                child: const Icon(
-                  CupertinoIcons.person_alt,
-                  color: AppColor.neutral400,
-                ),
-              ),
-              UIUtils.widthSpace(16),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      review.name ?? "",
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    UIUtils.heightSpace(4),
-                    Text(
-                      review.review ?? "",
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          UIUtils.heightSpace(12),
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: Theme.of(context).dividerColor,
-          ),
-        ],
       ),
     );
   }
