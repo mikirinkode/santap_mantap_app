@@ -24,7 +24,7 @@ Future<void> main() async {
 
   runApp(
     MultiProvider(
-      providers: [
+      providers: [  
         ChangeNotifierProvider(
           create: (_) => HomeProvider(),
         ),
@@ -38,7 +38,7 @@ Future<void> main() async {
           create: (_) => FavoriteProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => SettingProvider()..checkIsDarkTheme(),
+          create: (_) => SettingProvider()..initSetting(),
         ),
       ],
       child: const MyApp(),
@@ -52,26 +52,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingProvider>(
-      builder: (context, settingProvider, child) {
-        return MaterialApp(
-          title: 'SantapMantap',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme(context),
-          darkTheme: AppTheme.darkTheme(context),
-          themeMode: settingProvider.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: NavigationRoute.mainRoute.name,
-          routes: {
-            NavigationRoute.mainRoute.name: (context) => const HomeScreen(),
-            NavigationRoute.detailRoute.name: (context) => RestaurantDetailScreen(
-                  restaurantArg: ModalRoute.of(context)?.settings.arguments
-                      as RestaurantEntity,
-                ),
-            NavigationRoute.searchRoute.name: (context) => const SearchScreen(),
-            NavigationRoute.favoriteRoute.name: (context) => const FavoriteScreen(),
-            NavigationRoute.settingRoute.name: (context) => const SettingScreen(),
-          },
-        );
-      }
-    );
+        builder: (context, settingProvider, child) {
+      return MaterialApp(
+        title: 'SantapMantap',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme(context),
+        darkTheme: AppTheme.darkTheme(context),
+        themeMode:
+            settingProvider.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+        initialRoute: NavigationRoute.mainRoute.name,
+        routes: {
+          NavigationRoute.mainRoute.name: (context) => const HomeScreen(),
+          NavigationRoute.detailRoute.name: (context) => RestaurantDetailScreen(
+                restaurantArg: ModalRoute.of(context)?.settings.arguments
+                    as RestaurantEntity,
+              ),
+          NavigationRoute.searchRoute.name: (context) => const SearchScreen(),
+          NavigationRoute.favoriteRoute.name: (context) =>
+              const FavoriteScreen(),
+          NavigationRoute.settingRoute.name: (context) => const SettingScreen(),
+        },
+      );
+    });
   }
 }

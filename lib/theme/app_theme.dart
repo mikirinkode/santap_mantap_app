@@ -23,6 +23,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         centerTitle: true,
+        foregroundColor: AppColor.neutral700,
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: const TextStyle(color: AppColor.neutral200),
@@ -50,6 +51,10 @@ class AppTheme {
         backgroundColor: AppColor.primary500,
         foregroundColor: Colors.white,
       ),
+      listTileTheme: const ListTileThemeData(
+        textColor: AppColor.neutral700,
+        iconColor: AppColor.neutral500,
+      ),
     );
   }
 
@@ -68,6 +73,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColor.neutral800,
         centerTitle: true,
+        foregroundColor: Colors.white,
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: const TextStyle(color: AppColor.neutral200),
@@ -98,6 +104,10 @@ class AppTheme {
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
+      ),
+      listTileTheme: const ListTileThemeData(
+        textColor: Colors.white,
+        iconColor: AppColor.neutral200,
       ),
       extensions: [
         const SkeletonizerConfigData().copyWith(
