@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:santap_mantap_app/presentation/module/setting/setting_provider.dart';
-import 'package:santap_mantap_app/theme/app_color.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';
 
 import '../../../core/services/notification_service.dart';
@@ -126,7 +125,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           },
                         );
                       },
-                      child: Text("Izinkan"),
+                      child: const Text("Izinkan"),
                     ),
                   ),
                 ),

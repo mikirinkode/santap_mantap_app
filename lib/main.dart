@@ -11,7 +11,6 @@ import 'package:santap_mantap_app/presentation/module/search/search_provider.dar
 import 'package:santap_mantap_app/presentation/module/search/search_screen.dart';
 import 'package:santap_mantap_app/presentation/module/setting/setting_provider.dart';
 import 'package:santap_mantap_app/presentation/module/setting/setting_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'presentation/module/home/home_provider.dart';
 import 'routes/navigation_route.dart';

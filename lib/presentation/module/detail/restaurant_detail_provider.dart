@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:santap_mantap_app/data/source/local/sqlite_service.dart';
-import 'package:santap_mantap_app/di/injection.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_detail_entity.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart';
@@ -172,8 +171,8 @@ class RestaurantDetailProvider extends ChangeNotifier {
     const minHeight = 300.0;
     final maxHeight = _context.height;
 
-    final minBlur = 0.0;
-    final maxBlur = 10.0;
+    const minBlur = 0.0;
+    const maxBlur = 10.0;
 
     final minScrollExtent = _scrollController.position.minScrollExtent;
     final maxScrollExtent = _scrollController.position.maxScrollExtent;

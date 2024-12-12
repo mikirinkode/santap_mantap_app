@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/presentation/module/favorite/favorite_provider.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:santap_mantap_app/utils/ui_utils.dart';

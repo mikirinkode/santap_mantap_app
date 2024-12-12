@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:santap_mantap_app/data/source/local/shared_preferences_service.dart';
-import 'package:santap_mantap_app/di/injection.dart';
 import 'package:santap_mantap_app/core/services/notification_service.dart';
 import 'package:santap_mantap_app/core/services/permission_service.dart';
 

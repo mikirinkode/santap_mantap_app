@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:santap_mantap_app/data/source/local/sqlite_service.dart';
-import 'package:santap_mantap_app/di/injection.dart';
 
 import '../../../domain/entities/restaurant_entity.dart';
 import '../../../utils/ui_state.dart';

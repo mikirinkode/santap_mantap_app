@@ -10,7 +10,6 @@ import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/presentation/module/detail/restaurant_detail_provider.dart';
 import 'package:santap_mantap_app/presentation/module/detail/widget/menu_card.dart';
 import 'package:santap_mantap_app/utils/app_icons.dart';
-import 'package:santap_mantap_app/utils/build_context.dart';
 import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';

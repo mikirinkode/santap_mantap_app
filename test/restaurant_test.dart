@@ -1,9 +1,7 @@
 import 'package:mocktail/mocktail.dart';
-import 'package:santap_mantap_app/di/injection.dart';
 import 'package:santap_mantap_app/domain/entities/restaurant_entity.dart';
 import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart';
 import 'package:santap_mantap_app/presentation/module/home/home_provider.dart';
-import 'package:santap_mantap_app/utils/ui_loading_dummy_data.dart';
 import 'package:santap_mantap_app/utils/ui_state.dart';
 import 'package:test/test.dart';
 

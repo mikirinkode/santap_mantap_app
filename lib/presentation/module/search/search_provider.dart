@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../di/injection.dart';
 import '../../../domain/entities/restaurant_entity.dart';
 import '../../../domain/repositories/restaurant_repository.dart';
 import '../../../utils/ui_state.dart';
