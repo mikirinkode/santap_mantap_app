@@ -8,8 +8,7 @@ import '../../../domain/repositories/restaurant_repository.dart';
 import '../../../utils/ui_state.dart';
 
 class SearchProvider extends ChangeNotifier {
-  final RestaurantRepository _repository =
-      Injection.instance.restaurantRepository;
+  final RestaurantRepository _repository;
 
   UIState _state = UIState.initial();
 
@@ -22,6 +21,9 @@ class SearchProvider extends ChangeNotifier {
   Timer? _debounce;
 
   String _query = "";
+
+  SearchProvider({required RestaurantRepository repository})
+      : _repository = repository;
 
   Future<void> searchRestaurants() async {
     onSearchInputChanged(query: _query);

@@ -31,16 +31,28 @@ Future<void> main() async {
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) => RestaurantDetailProvider(context: context),
+          create: (context) => RestaurantDetailProvider(
+            context: context,
+            repository: injection.restaurantRepository,
+            sqliteService: injection.sqliteService,
+          ),
         ),
         ChangeNotifierProvider(
-          create: (_) => SearchProvider(),
+          create: (_) => SearchProvider(
+            repository: injection.restaurantRepository,
+          ),
         ),
         ChangeNotifierProvider(
-          create: (_) => FavoriteProvider(),
+          create: (_) => FavoriteProvider(
+            sqliteService: injection.sqliteService,
+          ),
         ),
         ChangeNotifierProvider(
-          create: (_) => SettingProvider()..initSetting(),
+          create: (_) => SettingProvider(
+            sharedPreferencesService: injection.sharedPreferencesService,
+            notificationService: injection.notificationService,
+            permissionService: injection.permissionService,
+          )..initSetting(),
         ),
       ],
       child: const MyApp(),

@@ -11,10 +11,11 @@ import '../../../domain/entities/review_entity.dart';
 import '../../../utils/ui_state.dart';
 
 class RestaurantDetailProvider extends ChangeNotifier {
-  final RestaurantRepository _repository =
-      Injection.instance.restaurantRepository;
+  final BuildContext _context;
 
-  final SqliteService _service = Injection.instance.sqliteService; // TODO: MOVE
+  final RestaurantRepository _repository;
+
+  final SqliteService _sqliteService;
 
   UIState _state = InitialState();
 
@@ -44,11 +45,13 @@ class RestaurantDetailProvider extends ChangeNotifier {
   final imageHeight = ValueNotifier<double>(600);
   final imageBlur = ValueNotifier<double>(0);
 
-  final BuildContext _context;
-
-  RestaurantDetailProvider({required BuildContext context})
-      : _context = context;
-
+  RestaurantDetailProvider({
+    required BuildContext context,
+    required RestaurantRepository repository,
+    required SqliteService sqliteService,
+  })  : _context = context,
+        _repository = repository,
+        _sqliteService = sqliteService;
 
   Future<void> getRestaurantDetail(String id) async {
     resetState();
@@ -123,11 +126,11 @@ class RestaurantDetailProvider extends ChangeNotifier {
             pictureUrl: restaurant?.pictureUrl,
           ),
         );
-        await _service.insertRestaurant(data);
+        await _sqliteService.insertRestaurant(data);
         onSuccess("Berhasil ditambahkan ke favorit");
         debugPrint("on success called");
       } else {
-        await _service.removeRestaurant(restaurant?.id ?? "");
+        await _sqliteService.removeRestaurant(restaurant?.id ?? "");
         onSuccess("Berhasil dihapus dari favorit");
         debugPrint("on success called");
       }
@@ -146,7 +149,7 @@ class RestaurantDetailProvider extends ChangeNotifier {
   }
 
   Future<void> _checkIsFavorite() async {
-    _isFavorite = await _service.contain(restaurant?.id ?? "");
+    _isFavorite = await _sqliteService.contain(restaurant?.id ?? "");
     notifyListeners();
   }
 

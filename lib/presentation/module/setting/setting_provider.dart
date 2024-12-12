@@ -9,14 +9,11 @@ import 'package:santap_mantap_app/core/services/permission_service.dart';
 import '../../../data/model/daily_reminder_model.dart';
 
 class SettingProvider extends ChangeNotifier {
-  final SharedPreferencesService _sharedPreferencesService =
-      Injection.instance.sharedPreferencesService;
+  final SharedPreferencesService _sharedPreferencesService;
 
-  final PermissionService _permissionService =
-      Injection.instance.permissionService;
+  final PermissionService _permissionService;
 
-  final NotificationService _notificationService =
-      Injection.instance.notificationService;
+  final NotificationService _notificationService;
 
   bool _isDarkTheme = false;
   bool get isDarkTheme => _isDarkTheme;
@@ -29,6 +26,14 @@ class SettingProvider extends ChangeNotifier {
   bool get isNotificationGranted => _isNotificationGranted;
 
   List<PendingNotificationRequest> pendingNotificationRequests = [];
+
+  SettingProvider({
+    required SharedPreferencesService sharedPreferencesService,
+    required PermissionService permissionService,
+    required NotificationService notificationService,
+  })  : _sharedPreferencesService = sharedPreferencesService,
+        _permissionService = permissionService,
+        _notificationService = notificationService;
 
   Future<void> initSetting() async {
     _isDarkTheme = await _sharedPreferencesService.isDarkTheme;
