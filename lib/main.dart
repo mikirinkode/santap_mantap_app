@@ -20,13 +20,15 @@ import 'theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Injection.instance.initialize();
+  final injection = await Injection.instance.initialize();
 
   runApp(
     MultiProvider(
-      providers: [  
+      providers: [
         ChangeNotifierProvider(
-          create: (_) => HomeProvider(),
+          create: (_) => HomeProvider(
+            repository: injection.restaurantRepository,
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => RestaurantDetailProvider(context: context),

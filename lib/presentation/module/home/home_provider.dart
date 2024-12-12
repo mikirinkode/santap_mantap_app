@@ -5,8 +5,7 @@ import 'package:santap_mantap_app/domain/repositories/restaurant_repository.dart
 import 'package:santap_mantap_app/utils/ui_state.dart';
 
 class HomeProvider extends ChangeNotifier {
-  final RestaurantRepository _repository =
-      Injection.instance.restaurantRepository;
+  final RestaurantRepository _repository;
 
   UIState _state = UIState.initial();
 
@@ -19,6 +18,9 @@ class HomeProvider extends ChangeNotifier {
   List<RestaurantEntity> _restaurants = [];
 
   List<RestaurantEntity> get restaurants => _restaurants;
+
+  HomeProvider({required RestaurantRepository repository})
+      : _repository = repository;
 
   Future<void> getRestaurants() async {
     _state = UIState.loading();

@@ -28,7 +28,7 @@ class Injection {
 
   static Injection get instance => _instance ??= Injection._internal();
 
-  initialize() async {
+  Future<Injection> initialize() async {
     final remoteDataSource = RemoteDataSource();
     final sharedPreferences = await SharedPreferences.getInstance();
     final notificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -49,7 +49,11 @@ class Injection {
 
     _notificationService = NotificationService(
       notificationsPlugin: notificationsPlugin,
-    )..init()..configureLocalTimeZone();
+    )
+      ..init()
+      ..configureLocalTimeZone();
+
+    return this;
   }
 
   RestaurantRepository get restaurantRepository => _restaurantRepository!;
